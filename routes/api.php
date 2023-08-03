@@ -20,3 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/test/resource', [TestController::class, 'getResourceTest']);
+
+Route::get('/test/people/store', [TestController::class, 'storePeople']);
