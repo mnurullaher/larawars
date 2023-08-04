@@ -6,6 +6,7 @@ use Exception;
 use App\Client\ResourceClient;
 use App\Services\PeopleService;
 use App\Services\PlanetService;
+use App\Services\StarshipService;
 use App\Services\VehicleService;
 use Illuminate\Console\Command;
 
@@ -28,7 +29,8 @@ class MigrateRecourcesCommand extends Command
     public function __construct(
         private PeopleService $peopleService,
         private PlanetService $planetService,
-        private VehicleService $vehicleService
+        private VehicleService $vehicleService,
+        private StarshipService $starshipService
     ) {
         parent::__construct();
     }
@@ -39,7 +41,8 @@ class MigrateRecourcesCommand extends Command
         $resources = [
             'people' => $this->peopleService,
             'planets' => $this->planetService,
-            'vehicles' => $this->vehicleService
+            'vehicles' => $this->vehicleService,
+            'starships' => $this->starshipService
         ];
 
         foreach($resources as $resource => $service) {
