@@ -6,6 +6,7 @@ use Exception;
 use App\Client\ResourceClient;
 use App\Services\PeopleService;
 use App\Services\PlanetService;
+use App\Services\VehicleService;
 use Illuminate\Console\Command;
 
 class MigrateRecourcesCommand extends Command
@@ -26,7 +27,8 @@ class MigrateRecourcesCommand extends Command
 
     public function __construct(
         private PeopleService $peopleService,
-        private PlanetService $planetService
+        private PlanetService $planetService,
+        private VehicleService $vehicleService
     ) {
         parent::__construct();
     }
@@ -36,7 +38,8 @@ class MigrateRecourcesCommand extends Command
 
         $resources = [
             'people' => $this->peopleService,
-            'planets' => $this->planetService
+            'planets' => $this->planetService,
+            'vehicles' => $this->vehicleService
         ];
 
         foreach($resources as $resource => $service) {
@@ -55,7 +58,7 @@ class MigrateRecourcesCommand extends Command
             $this->error('Exception during data fetching: ' . $ex->getMessage());
             return;
         }
-        $this->info('Writing' . $resource . 'data to database');
+        $this->info('Writing ' . $resource . ' data to database');
         $service->store($resourceArr);
         $this->info($resource . ' data stored');
     }
