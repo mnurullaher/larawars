@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Exception;
 use App\Client\ResourceClient;
 use App\Services\PeopleService;
+use App\Services\PlanetService;
 use Illuminate\Console\Command;
 
 class MigrateRecourcesCommand extends Command
@@ -23,25 +24,39 @@ class MigrateRecourcesCommand extends Command
      */
     protected $description = 'Migrate resources to database';
 
-    public function __construct(private PeopleService $peopleService)
-    {
+    public function __construct(
+        private PeopleService $peopleService,
+        private PlanetService $planetService
+    ) {
         parent::__construct();
     }
-    
+
     public function handle()
     {
-        $this->info('Fetching people data...');
+
+        $resources = [
+            'people' => $this->peopleService,
+            'planets' => $this->planetService
+        ];
+
+        foreach($resources as $resource => $service) {
+            $this->migrateResource($resource, $service);
+        }
+
+        $this->info('All resources pulled from star-wars api and migrated to database');
+    }
+
+    private function migrateResource($resource, $service) {
+        $this->info('Fetching ' . $resource . ' data...');
         try {
-            $peopleArr = ResourceClient::getResource('people');
-            $this->info('People data fetched');
+            $resourceArr = ResourceClient::getResource($resource);
+            $this->info($resource . ' data fetched');
         } catch (Exception $ex) {
             $this->error('Exception during data fetching: ' . $ex->getMessage());
             return;
         }
-
-        $this->info('Writing people data to database');
-        $this->peopleService->store($peopleArr);
-
-        $this->info('All resources pulled from star-wars api and migrated to database');
+        $this->info('Writing' . $resource . 'data to database');
+        $service->store($resourceArr);
+        $this->info($resource . ' data stored');
     }
 }
