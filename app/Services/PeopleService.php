@@ -13,4 +13,14 @@ class PeopleService implements ResourceService {
             People::updateOrCreate(['name' => $person->name], get_object_vars($person));
         }
     }
+
+    public function getAllPeople()
+    {
+        return People::paginate(10);
+    }
+
+    public function detail(int $id)
+    {
+        return People::find($id);
+    }
 }
