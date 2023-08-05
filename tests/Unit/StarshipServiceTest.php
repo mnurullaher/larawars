@@ -4,10 +4,12 @@ namespace Tests\Unit;
 
 use App\Client\ResourceClient;
 use App\Services\StarshipService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StarshipServiceTest extends TestCase
 {
+    use RefreshDatabase;
     private StarshipService $starshipService;
 
     public function __construct(string $name)

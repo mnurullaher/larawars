@@ -4,10 +4,12 @@ namespace Tests\Unit;
 
 use App\Client\ResourceClient;
 use App\Services\PeopleService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PeopleServiceTest extends TestCase
 {
+    use RefreshDatabase;
     private PeopleService $peopleService;
 
     public function __construct(string $name)

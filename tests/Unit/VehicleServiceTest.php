@@ -4,10 +4,12 @@ namespace Tests\Unit;
 
 use App\Client\ResourceClient;
 use App\Services\VehicleService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class VehicleServiceTest extends TestCase
 {
+    use RefreshDatabase;
     private VehicleService $vehicleService;
 
     public function __construct(string $name)

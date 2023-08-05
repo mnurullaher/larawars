@@ -4,11 +4,12 @@ namespace Tests\Unit;
 
 use App\Client\ResourceClient;
 use App\Services\PlanetService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PlanetServiceTest extends TestCase
 {
-
+    use RefreshDatabase;
     private PlanetService $planetService;
 
     public function __construct(string $name)
