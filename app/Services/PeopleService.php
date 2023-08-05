@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Models\People;
+use App\Services\Interfaces\ResourceService;
 
-class PeopleService {
+class PeopleService implements ResourceService {
 
     public function store(array $people)
     {

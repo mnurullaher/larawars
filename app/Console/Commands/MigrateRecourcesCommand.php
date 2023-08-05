@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Services\Interfaces\ResourceService;
 use Exception;
 use App\Client\ResourceClient;
 use App\Services\PeopleService;
@@ -52,7 +53,7 @@ class MigrateRecourcesCommand extends Command
         $this->info('All resources pulled from star-wars api and migrated to database');
     }
 
-    private function migrateResource($resource, $service) {
+    private function migrateResource(string $resource, ResourceService $service): void {
         $this->info('Fetching ' . $resource . ' data...');
         try {
             $resourceArr = ResourceClient::getResource($resource);

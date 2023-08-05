@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Models\Starship;
+use App\Services\Interfaces\ResourceService;
 
-class StarshipService {
+class StarshipService implements ResourceService {
 
     public function store(array $starships)
     {

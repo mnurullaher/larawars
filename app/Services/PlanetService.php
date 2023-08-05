@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Models\Planet;
+use App\Services\Interfaces\ResourceService;
 
-class PlanetService {
+class PlanetService implements ResourceService {
 
     public function store(array $planets)
     {

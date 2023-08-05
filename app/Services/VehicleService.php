@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Models\Vehicle;
+use App\Services\Interfaces\ResourceService;
 
-class VehicleService {
+class VehicleService implements ResourceService {
 
     public function store(array $vehicles)
     {
