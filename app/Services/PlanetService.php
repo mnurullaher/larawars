@@ -13,4 +13,14 @@ class PlanetService implements ResourceService {
             Planet::updateOrCreate(['name' => $planet->name], get_object_vars($planet));
         }
     }
+
+    public function getALlPlanets()
+    {
+        return Planet::paginate(10);
+    }
+
+    public function detail(int $id)
+    {
+        return Planet::find($id);
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PeopleController;
+use App\Http\Controllers\PlanetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/people/index', [PeopleController::class, 'index']);
 Route::get('/people/{id}', [PeopleController::class, 'detail']);
+
+Route::get('/planets/index', [PlanetController::class, 'index']);
+Route::get('/planets/{id}', [PlanetController::class, 'detail']);

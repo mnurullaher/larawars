@@ -3,46 +3,46 @@
 namespace Tests\Feature;
 
 use App\Client\ResourceClient;
-use App\Services\PeopleService;
+use App\Services\PlanetService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
-class PeopleControllerTest extends TestCase
+class PlanetControllerTest extends TestCase
 {
     use RefreshDatabase;
-    private PeopleService $peopleService;
+    private PlanetService $planetService;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->peopleService = new PeopleService();
-        $this->peopleService->store(ResourceClient::getResource('people'));
+        $this->planetService = new PlanetService();
+        $this->planetService->store(ResourceClient::getResource('planets'));
     }
 
-    public function test_should_return_all_people(): void
+    public function test_should_return_all_planets(): void
     {
-        $response = $this->get('/api/people/index');
+        $response = $this->get('/api/planets/index');
         $data = $response->json();
 
         $response->assertStatus(200);
         $this->assertEquals(10, count($data['data']));
-        $this->assertEquals(82, $data['total']);
+        $this->assertEquals(60, $data['total']);
 
         Artisan::call('migrate:refresh');
     }
 
-    public function test_should_return_one_person(): void
+    public function test_should_return_one_planet(): void
     {
-        $response = $this->get('/api/people/1');
+        $response = $this->get('/api/planets/1');
         $data = $response->json();
-        $notFoundResponse = $this->get('/api/people/99');
+        $notFoundResponse = $this->get('/api/planets/99');
         $notFoundData = $notFoundResponse->json();
 
         $response->assertStatus(200);
         $notFoundResponse->assertStatus(200);
-        $this->assertEquals('Luke Skywalker', $data['name']);
+        $this->assertEquals('Tatooine', $data['name']);
         $this->assertEquals('Not Found', $notFoundData['error']);
 
         Artisan::call('migrate:refresh');
