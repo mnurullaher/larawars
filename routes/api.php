@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\PlanetController;
+use App\Http\Controllers\StarshipController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,3 +26,6 @@ Route::get('/people/{id}', [PeopleController::class, 'detail']);
 
 Route::get('/planets/index', [PlanetController::class, 'index']);
 Route::get('/planets/{id}', [PlanetController::class, 'detail']);
+
+Route::get('/starships/index', [StarshipController::class, 'index']);
+Route::get('/starships/{id}', [StarshipController::class, 'detail']);
