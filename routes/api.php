@@ -3,6 +3,7 @@
 use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\PlanetController;
 use App\Http\Controllers\StarshipController;
+use App\Http\Controllers\VehicleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +30,6 @@ Route::get('/planets/{id}', [PlanetController::class, 'detail']);
 
 Route::get('/starships/index', [StarshipController::class, 'index']);
 Route::get('/starships/{id}', [StarshipController::class, 'detail']);
+
+Route::get('/vehicles/index', [VehicleController::class, 'index']);
+Route::get('/vehicles/{id}', [VehicleController::class, 'detail']);

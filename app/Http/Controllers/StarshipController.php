@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\PlanetService;
 use App\Services\StarshipService;
-use Illuminate\Http\Request;
 
 class StarshipController extends Controller
 {

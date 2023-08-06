@@ -13,4 +13,14 @@ class VehicleService implements ResourceService {
             Vehicle::updateOrCreate(['name' => $vehicle->name], get_object_vars($vehicle));
         }
     }
+
+    public function getALlVehicles()
+    {
+        return Vehicle::paginate(10);
+    }
+
+    public function detail(int $id)
+    {
+        return Vehicle::find($id);
+    }
 }

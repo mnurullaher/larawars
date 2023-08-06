@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Planet;
 use App\Models\Starship;
 use App\Services\Interfaces\ResourceService;
 
