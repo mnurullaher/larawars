@@ -3,27 +3,31 @@
 namespace Tests\Feature;
 
 use App\Client\ResourceClient;
+use App\Models\User;
 use App\Services\PlanetService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
+use Tests\TestUtils;
 
 class PlanetControllerTest extends TestCase
 {
     use RefreshDatabase;
     private PlanetService $planetService;
+    private User $user;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->planetService = new PlanetService();
         $this->planetService->store(ResourceClient::getResource('planets'));
+        $this->user = TestUtils::createUser();
     }
 
     public function test_should_return_all_planets(): void
     {
-        $response = $this->get('/api/planets/index');
+        $response = $this->actingAs($this->user)->get('/api/planets/index');
         $data = $response->json();
 
         $response->assertStatus(200);
@@ -35,7 +39,7 @@ class PlanetControllerTest extends TestCase
 
     public function test_should_return_one_planet(): void
     {
-        $response = $this->get('/api/planets/1');
+        $response = $this->actingAs($this->user)->get('/api/planets/1');
         $data = $response->json();
         $notFoundResponse = $this->get('/api/planets/99');
         $notFoundData = $notFoundResponse->json();
