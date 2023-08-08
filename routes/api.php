@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\InvasionController;
 use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\PlanetController;
 use App\Http\Controllers\StarshipController;
@@ -33,6 +34,8 @@ Route::get('/starships/{id}', [StarshipController::class, 'detail'])->middleware
 
 Route::get('/vehicles/index', [VehicleController::class, 'index'])->middleware('auth:sanctum');;
 Route::get('/vehicles/{id}', [VehicleController::class, 'detail'])->middleware('auth:sanctum');;
+
+Route::post('/invade', [InvasionController::class, 'invade']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
