@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Client\ResourceClient;
+use App\Models\People;
 use App\Services\PeopleService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -11,43 +11,34 @@ class PeopleServiceTest extends TestCase
 {
     use RefreshDatabase;
     private PeopleService $peopleService;
+    private array $peopleArr = array();
 
-    public function __construct(string $name)
+    protected function setUp(): void
     {
-        parent::__construct($name);
+        parent::setUp();
         $this->peopleService = new PeopleService();
+        $people = People::factory()->count(20)->make();
+        foreach ($people as $person) {
+            $this->peopleArr[] = $person;
+        }
     }
 
-    public function test_create_and_update_properly(): void
+    public function test_store_new_record_properly(): void
     {
-        $peopleArr = ResourceClient::getResource('people');
-        $this->peopleService->store($peopleArr);
+        $this->peopleService->store($this->peopleArr);
 
-        $this->assertDatabaseCount('people', 82);
+        $this->assertDatabaseCount('people', 20);
+        $this->assertDatabaseHas('people', $this->peopleArr[0]->toArray());
+    }
+
+    public function test_do_not_recreate_record_with_same_name() {
+        $this->peopleService->store($this->peopleArr);
+        $this->peopleArr[0]->hair_color = 'updated';
+        $this->peopleService->store($this->peopleArr);
+
+        $this->assertDatabaseCount('people', 20);
         $this->assertDatabaseHas('people', [
-            'name' => 'Luke Skywalker',
-            'height' => '172',
-            'mass' => '77',
-            'hair_color' => 'blond',
-            'skin_color' => 'fair',
-            'eye_color' => 'blue',
-            'birth_year' => '19BBY',
-            'gender' => 'male'
-        ]);
-
-        $peopleArr[0]->hair_color = 'updated hair color';
-        $this->peopleService->store($peopleArr);
-
-        $this->assertDatabaseCount('people', 82);
-        $this->assertDatabaseHas('people', [
-            'name' => 'Luke Skywalker',
-            'height' => '172',
-            'mass' => '77',
-            'hair_color' => 'updated hair color',
-            'skin_color' => 'fair',
-            'eye_color' => 'blue',
-            'birth_year' => '19BBY',
-            'gender' => 'male'
+            'hair_color' => 'updated'
         ]);
     }
 }

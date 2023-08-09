@@ -2,7 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Client\ResourceClient;
+use App\Models\Vehicle;
+use App\Services\PeopleService;
 use App\Services\VehicleService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -11,47 +12,34 @@ class VehicleServiceTest extends TestCase
 {
     use RefreshDatabase;
     private VehicleService $vehicleService;
+    private array $vehicleArr = array();
 
-    public function __construct(string $name)
+    protected function setUp(): void
     {
-        $this->vehicleService = new VehicleService();
-        parent::__construct($name);
+        parent::setUp();
+        $this->vehicleService = new VehicleService(new PeopleService());
+        $vehicles = Vehicle::factory()->count(20)->make();
+        foreach ($vehicles as $vehicle) {
+            $this->vehicleArr[] = $vehicle;
+        }
     }
 
-    public function test_create_and_update_properly(): void
+    public function test_store_new_record_properly(): void
     {
-        $vehiclesArr = ResourceClient::getResource('vehicles');
-        $this->vehicleService->store($vehiclesArr);
+        $this->vehicleService->store($this->vehicleArr);
 
-        $this->assertDatabaseCount('vehicles', 39);
+        $this->assertDatabaseCount('vehicles', 20);
+        $this->assertDatabaseHas('vehicles', $this->vehicleArr[0]->toArray());
+    }
+
+    public function test_do_not_recreate_record_with_same_name() {
+        $this->vehicleService->store($this->vehicleArr);
+        $this->vehicleArr[0]->model = 'updated';
+        $this->vehicleService->store($this->vehicleArr);
+
+        $this->assertDatabaseCount('vehicles', 20);
         $this->assertDatabaseHas('vehicles', [
-            'name' => 'Sand Crawler',
-            'model' => 'Digger Crawler',
-            'manufacturer' => 'Corellia Mining Corporation',
-            'cost_in_credits' => '150000',
-            'length' => '36.8',
-            'max_atmosphering_speed' => '30',
-            'crew' => '46',
-            'passengers' => '30',
-            'consumables' => '2 months',
-            'vehicle_class' => 'wheeled'
-        ]);
-
-        $vehiclesArr[0]->model = 'updated model';
-        $this->vehicleService->store($vehiclesArr);
-
-        $this->assertDatabaseCount('vehicles', 39);
-        $this->assertDatabaseHas('vehicles', [
-            'name' => 'Sand Crawler',
-            'model' => 'updated model',
-            'manufacturer' => 'Corellia Mining Corporation',
-            'cost_in_credits' => '150000',
-            'length' => '36.8',
-            'max_atmosphering_speed' => '30',
-            'crew' => '46',
-            'passengers' => '30',
-            'consumables' => '2 months',
-            'vehicle_class' => 'wheeled'
+            'model' => 'updated'
         ]);
     }
 }

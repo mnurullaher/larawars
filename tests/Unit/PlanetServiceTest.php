@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Client\ResourceClient;
+use App\Models\Planet;
 use App\Services\PlanetService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -11,45 +11,34 @@ class PlanetServiceTest extends TestCase
 {
     use RefreshDatabase;
     private PlanetService $planetService;
+    private array $planetArr = array();
 
-    public function __construct(string $name)
+    protected function setUp(): void
     {
+        parent::setUp();
         $this->planetService = new PlanetService();
-        parent::__construct($name);
+        $planets = Planet::factory()->count(20)->make();
+        foreach ($planets as $planet) {
+            $this->planetArr[] = $planet;
+        }
     }
 
-    public function test_create_and_update_properly(): void
+    public function test_store_new_record_properly(): void
     {
-        $planetArr = ResourceClient::getResource('planets');
-        $this->planetService->store($planetArr);
+        $this->planetService->store($this->planetArr);
 
-        $this->assertDatabaseCount('planets', 60);
+        $this->assertDatabaseCount('planets', 20);
+        $this->assertDatabaseHas('planets', $this->planetArr[0]->toArray());
+    }
+
+    public function test_do_not_recreate_record_with_same_name() {
+        $this->planetService->store($this->planetArr);
+        $this->planetArr[0]->diameter = 'updated';
+        $this->planetService->store($this->planetArr);
+
+        $this->assertDatabaseCount('planets', 20);
         $this->assertDatabaseHas('planets', [
-            'name' => 'Tatooine',
-            'rotation_period' => '23',
-            'orbital_period' => '304',
-            'diameter' => '10465',
-            'climate' => 'arid',
-            'gravity' => '1 standard',
-            'terrain' => 'desert',
-            'surface_water' => '1',
-            'population' => '200000'
-        ]);
-
-        $planetArr[0]->rotation_period = 'updated';
-        $this->planetService->store($planetArr);
-
-        $this->assertDatabaseCount('planets', 60);
-        $this->assertDatabaseHas('planets', [
-            'name' => 'Tatooine',
-            'rotation_period' => 'updated',
-            'orbital_period' => '304',
-            'diameter' => '10465',
-            'climate' => 'arid',
-            'gravity' => '1 standard',
-            'terrain' => 'desert',
-            'surface_water' => '1',
-            'population' => '200000'
+            'diameter' => 'updated'
         ]);
     }
 }

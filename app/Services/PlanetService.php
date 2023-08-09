@@ -10,7 +10,7 @@ class PlanetService implements ResourceService {
     public function store(array $planets)
     {
         foreach ($planets as $planet) {
-            Planet::updateOrCreate(['name' => $planet->name], get_object_vars($planet));
+            Planet::updateOrCreate(['name' => $planet->name], json_decode(json_encode($planet), true));
         }
     }
 

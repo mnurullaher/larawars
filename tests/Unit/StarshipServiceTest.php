@@ -2,7 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Client\ResourceClient;
+use App\Models\Starship;
+use App\Services\PeopleService;
 use App\Services\StarshipService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -11,53 +12,34 @@ class StarshipServiceTest extends TestCase
 {
     use RefreshDatabase;
     private StarshipService $starshipService;
+    private array $starshipArr = array();
 
-    public function __construct(string $name)
+    protected function setUp(): void
     {
-        $this->starshipService = new StarshipService();
-        parent::__construct($name);
+        parent::setUp();
+        $this->starshipService = new StarshipService(new PeopleService());
+        $starships = Starship::factory()->count(20)->make();
+        foreach ($starships as $starship) {
+            $this->starshipArr[] = $starship;
+        }
     }
 
-    public function test_create_and_update_properly(): void
+    public function test_store_new_record_properly(): void
     {
-        $starshipsArr = ResourceClient::getResource('starships');
-        $this->starshipService->store($starshipsArr);
+        $this->starshipService->store($this->starshipArr);
 
-        $this->assertDatabaseCount('starships', 36);
+        $this->assertDatabaseCount('starships', 20);
+        $this->assertDatabaseHas('starships', $this->starshipArr[0]->toArray());
+    }
+
+    public function test_do_not_recreate_record_with_same_name() {
+        $this->starshipService->store($this->starshipArr);
+        $this->starshipArr[0]->model = 'updated';
+        $this->starshipService->store($this->starshipArr);
+
+        $this->assertDatabaseCount('starships', 20);
         $this->assertDatabaseHas('starships', [
-            'name' => 'CR90 corvette',
-            'model' => 'CR90 corvette',
-            'manufacturer' => 'Corellian Engineering Corporation',
-            'cost_in_credits' => '3500000',
-            'length' => '150',
-            'max_atmosphering_speed' => '950',
-            'crew' => '30-165',
-            'passengers' => '600',
-            'cargo_capacity' => '3000000',
-            'consumables' => '1 year',
-            'hyperdrive_rating' => '2.0',
-            'MGLT' => '60',
-            'starship_class' => 'corvette'
-        ]);
-
-        $starshipsArr[0]->model = 'updated model';
-        $this->starshipService->store($starshipsArr);
-
-        $this->assertDatabaseCount('starships', 36);
-        $this->assertDatabaseHas('starships', [
-            'name' => 'CR90 corvette',
-            'model' => 'updated model',
-            'manufacturer' => 'Corellian Engineering Corporation',
-            'cost_in_credits' => '3500000',
-            'length' => '150',
-            'max_atmosphering_speed' => '950',
-            'crew' => '30-165',
-            'passengers' => '600',
-            'cargo_capacity' => '3000000',
-            'consumables' => '1 year',
-            'hyperdrive_rating' => '2.0',
-            'MGLT' => '60',
-            'starship_class' => 'corvette'
+            'model' => 'updated'
         ]);
     }
 }

@@ -16,7 +16,7 @@ class VehicleService implements ResourceService {
     public function store(array $vehicles)
     {
         foreach ($vehicles as $vehicle) {
-            Vehicle::updateOrCreate(['name' => $vehicle->name], get_object_vars($vehicle));
+            Vehicle::updateOrCreate(['name' => $vehicle->name], json_decode(json_encode($vehicle), true));
         }
     }
 
