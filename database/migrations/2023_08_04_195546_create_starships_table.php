@@ -26,8 +26,9 @@ return new class extends Migration
             $table->string('hyperdrive_rating');
             $table->string('MGLT');
             $table->string('starship_class');
+            $table->foreignId('owner_id')->nullable()->constrained()->on('people');
             $table->timestamps();
-        });;
+        });
     }
 
     /**

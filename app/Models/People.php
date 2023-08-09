@@ -18,5 +18,13 @@ class People extends Model
         'eye_color',
         'birth_year',
         'gender'
-    ]; 
+    ];
+
+    public function starships() {
+        return $this->hasMany(Starship::class, 'owner_id');
+    }
+
+    public function vehicles() {
+        return $this->hasMany(Vehicle::class, 'owner_id');
+    }
 }

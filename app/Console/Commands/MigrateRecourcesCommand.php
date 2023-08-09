@@ -47,10 +47,30 @@ class MigrateRecourcesCommand extends Command
         ];
 
         foreach($resources as $resource => $service) {
-            $this->migrateResource($resource, $service);
+            try {
+                $this->migrateResource($resource, $service);
+            } catch (Exception $ex) {
+                $this->error('An exception occurred during data fetching: ' . $ex->getMessage());
+                return;
+            }
         }
-
         $this->info('All resources pulled from star-wars api and migrated to database');
+
+        $peopleWithStarships = [
+            'Han Solo' => 'Millennium Falcon',
+            'Luke Skywalker' => 'Star Destroyer',
+            'Leia Organa' => 'CR90 corvette',
+            'Darth Vader' => 'Death Star'
+        ];
+        $this->equipWithStarShip($peopleWithStarships);
+
+        $peopleWithVehicles = [
+            'Anakin Skywalker' => 'AT-AT',
+            'Boba Fett' => 'LAAT/i',
+            'Yoda' => 'AT-TE',
+            'Qui-Gon Jinn' => 'Vulture Droid'
+        ];
+        $this->equipWithVehicle($peopleWithVehicles);
     }
 
     private function migrateResource(string $resource, ResourceService $service): void {
@@ -59,11 +79,26 @@ class MigrateRecourcesCommand extends Command
             $resourceArr = ResourceClient::getResource($resource);
             $this->info($resource . ' data fetched');
         } catch (Exception $ex) {
-            $this->error('Exception during data fetching: ' . $ex->getMessage());
-            return;
+            throw $ex;
         }
         $this->info('Writing ' . $resource . ' data to database');
         $service->store($resourceArr);
         $this->info($resource . ' data stored');
+    }
+
+    private function equipWithStarShip($peopleWithStarships):void {
+        $this->info('Equipping people with starships');
+        foreach ($peopleWithStarships as $person => $starship) {
+            $this->starshipService->attachToPerson($person, $starship);
+        }
+        $this->info('Starship equipping completed');
+    }
+
+    public function equipWithVehicle($peopleWithVehicles):void {
+        $this->info('Equipping people with vehicles');
+        foreach ($peopleWithVehicles as $person => $vehicle) {
+            $this->vehicleService->attachToPerson($person, $vehicle);
+        }
+        $this->info('Vehicle equipping completed');
     }
 }

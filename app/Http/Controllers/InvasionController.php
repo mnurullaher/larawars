@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invasion;
 use App\Models\People;
 use App\Models\Planet;
 use Illuminate\Http\Request;
@@ -11,12 +12,14 @@ class InvasionController extends Controller
     public function invade(Request $request) {
         $request->validate([
             'invaders' => ['required', 'array'],
-            'planet' => 'required'
+            'planet' => 'required',
+            'title' => 'required'
         ]);
 
-        $invaders = $request->input('invaders');
-        $planet = $request->input('planet');
-        $resourceValidation = $this->validateResources($invaders, $planet);
+        $title = $request->input('title');
+        $invaderNames = $request->input('invaders');
+        $planetName = $request->input('planet');
+        $resourceValidation = $this->validateResources($invaderNames, $planetName);
 
         if (!$resourceValidation['isValid']) {
             return response()->json([
@@ -24,25 +27,43 @@ class InvasionController extends Controller
             ], 400);
         }
 
+        if (!($this->hasStarship($invaderNames) && $this->hasVehicle($invaderNames))) {
+            return response()->json([
+                'message' => "This expedition is not possible!. Those invaders don't have necessary equipments."
+            ], 400);
+        }
+
+        $invasion = Invasion::create([
+            'title' => $title,
+            'planet_id' => Planet::where('name', $planetName)->first()->id
+        ]);
+
+        foreach ($this->getInvaders($invaderNames) as $invader) {
+            $invasion->people()->attach($invader);
+        }
+
         return response()->json([
-           'message' => "Now, check whether our people are ready for invasion or not!"
+            'message' => 'Planet invaded successfully!'
         ]);
     }
 
-    private function validateResources($invaders, $planet): array {
-        if(count(array_unique($invaders)) != count($invaders)) {
+    private function validateResources($invaderNames, $planetName): array {
+        if(count(array_unique($invaderNames)) != count($invaderNames)) {
             return $this->resourceValidationError("You can not call a person twice for an invasion!");
         }
-        if (count($invaders) < 2) {
+        if (count($invaderNames) < 2) {
             return $this->resourceValidationError("You can not invade a planet with a handful of people!");
         }
-        foreach ($invaders as $invader) {
-            if (!People::where('name', $invader)->exists()) {
-                return $this->resourceValidationError("Not this time. You may have $invader in another universe!");
+        foreach ($invaderNames as $invaderName) {
+            if (!People::where('name', $invaderName)->exists()) {
+                return $this->resourceValidationError("Not this time. You may have $invaderName in another universe!");
             }
         }
-        if (!Planet::where('name', $planet)->exists()) {
+        if (!Planet::where('name', $planetName)->exists()) {
             return $this->resourceValidationError("Non-existed planets cannot be invaded");
+        }
+        if (Planet::where('name', $planetName)->first()->invasion) {
+            return $this->resourceValidationError('Planet has already invaded');
         }
 
         return ['isValid' => true];
@@ -53,5 +74,31 @@ class InvasionController extends Controller
             'isValid' => false,
             'message' => $message,
         ];
+    }
+
+    private function getInvaders($invaderNames): array {
+        $invaders = array();
+        foreach ($invaderNames as $invaderName) {
+            $invaders[] = People::where('name', $invaderName)->first();
+        }
+        return $invaders;
+    }
+
+    private function hasStarship($invaderNames): bool {
+        foreach ($this->getInvaders($invaderNames) as $invader) {
+            if (count($invader->starships) > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function hasVehicle($invaderNames): bool {
+        foreach ($this->getInvaders($invaderNames) as $invader) {
+            if (count($invader->vehicles) > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -23,4 +23,8 @@ class PeopleService implements ResourceService {
     {
         return People::find($id);
     }
+
+    public function getByName($name) {
+        return People::where('name', $name)->first();
+    }
 }

@@ -21,4 +21,8 @@ class Vehicle extends Model
         'consumables',
         'vehicle_class'
     ];
+
+    public function people() {
+        return $this->belongsTo(People::class, 'owner_id');
+    }
 }

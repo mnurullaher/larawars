@@ -20,4 +20,8 @@ class Planet extends Model
         'surface_water',
         'population'
     ];
+
+    public function invasion() {
+        return $this->hasOne(Invasion::class);
+    }
 }

@@ -22,6 +22,11 @@ class Starship extends Model
         'consumables',
         'hyperdrive_rating',
         'MGLT',
-        'starship_class'
+        'starship_class',
+        'owner_id'
     ];
+
+    public function people() {
+        return $this->belongsTo(People::class, 'owner_id');
+    }
 }
