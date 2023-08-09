@@ -7,6 +7,7 @@ use App\Services\PeopleService;
 use App\Services\VehicleService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\TestUtils;
 
 class VehicleServiceTest extends TestCase
 {
@@ -19,9 +20,7 @@ class VehicleServiceTest extends TestCase
         parent::setUp();
         $this->vehicleService = new VehicleService(new PeopleService());
         $vehicles = Vehicle::factory()->count(20)->make();
-        foreach ($vehicles as $vehicle) {
-            $this->vehicleArr[] = $vehicle;
-        }
+        $this->vehicleArr = TestUtils::getResourceArray($vehicles);
     }
 
     public function test_store_new_record_properly(): void

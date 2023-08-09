@@ -6,6 +6,7 @@ use App\Models\People;
 use App\Services\PeopleService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\TestUtils;
 
 class PeopleServiceTest extends TestCase
 {
@@ -18,9 +19,7 @@ class PeopleServiceTest extends TestCase
         parent::setUp();
         $this->peopleService = new PeopleService();
         $people = People::factory()->count(20)->make();
-        foreach ($people as $person) {
-            $this->peopleArr[] = $person;
-        }
+        $this->peopleArr = TestUtils::getResourceArray($people);
     }
 
     public function test_store_new_record_properly(): void

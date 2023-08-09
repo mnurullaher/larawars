@@ -9,4 +9,12 @@ class TestUtils
     public static function createUser() {
         return User::factory()->create();
     }
+
+    public static function getResourceArray($resourceCollection): array {
+        $resourceArr = array();
+        foreach ($resourceCollection as $resourceInstance) {
+            $resourceArr[] = $resourceInstance;
+        }
+        return $resourceArr;
+    }
 }

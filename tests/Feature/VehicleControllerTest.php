@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Client\ResourceClient;
 use App\Models\User;
+use App\Models\Vehicle;
+use App\Services\PeopleService;
 use App\Services\VehicleService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 use Tests\TestUtils;
@@ -17,38 +17,53 @@ class VehicleControllerTest extends TestCase
 
     private VehicleService $vehicleService;
     private User $user;
+    private array $vehicleArr = array();
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->vehicleService = new VehicleService();
-        $this->vehicleService->store(ResourceClient::getResource('vehicles'));
+        $this->vehicleService = new VehicleService(new PeopleService());
+        $vehicles = Vehicle::factory()->count(20)->make();
+        $this->vehicleArr = TestUtils::getResourceArray($vehicles);
         $this->user = TestUtils::createUser();
     }
 
-    public function test_should_return_all_vehicles(): void
+    public function test_should_return_all_planets(): void
     {
-        $response = $this->actingAs($this->user)->get('/api/vehicles/index');
-        $data = $response->json();
+        $this->vehicleService->store($this->vehicleArr);
+
+        $response = $this->actingAs($this->user)->get('/api/vehicles');
+        $data = $response->json()[0];
+
 
         $response->assertStatus(200);
         $this->assertEquals(10, count($data['data']));
-        $this->assertEquals(39, $data['total']);
+        $this->assertEquals(20, $data['total']);
+        Artisan::call('migrate:refresh');
+    }
+
+    public function test_should_return_one_planet(): void
+    {
+        $requestedId =  count($this->vehicleArr) - 1;
+        $this->vehicleService->store($this->vehicleArr);
+
+        $response = $this->actingAs($this->user)->get('/api/vehicles/' . $requestedId);
+        $data = $response->json()[0];
+
+        $response->assertStatus(200);
+        $this->assertEquals($this->vehicleArr[$requestedId-1]->name, $data['name']);
 
         Artisan::call('migrate:refresh');
     }
 
-    public function test_should_return_one_vehicles(): void
-    {
-        $response = $this->actingAs($this->user)->get('/api/vehicles/1');
-        $data = $response->json();
-        $notFoundResponse = $this->get('/api/vehicles/99');
-        $notFoundData = $notFoundResponse->json();
+    public function test_should_return_not_found_for_non_existed_planet() {
+        $this->vehicleService->store($this->vehicleArr);
 
-        $response->assertStatus(200);
-        $notFoundResponse->assertStatus(200);
-        $this->assertEquals('Sand Crawler', $data['name']);
-        $this->assertEquals('Not Found', $notFoundData['error']);
+        $response = $this->actingAs($this->user)->get('/api/planets/' . count($this->vehicleArr) + 1);
+        $data = $response->json();
+
+        $response->assertStatus(404);
+        $this->assertEquals('Not Found', $data['error']);
 
         Artisan::call('migrate:refresh');
     }

@@ -6,6 +6,7 @@ use App\Models\Planet;
 use App\Services\PlanetService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\TestUtils;
 
 class PlanetServiceTest extends TestCase
 {
@@ -18,9 +19,7 @@ class PlanetServiceTest extends TestCase
         parent::setUp();
         $this->planetService = new PlanetService();
         $planets = Planet::factory()->count(20)->make();
-        foreach ($planets as $planet) {
-            $this->planetArr[] = $planet;
-        }
+        $this->planetArr = TestUtils::getResourceArray($planets);
     }
 
     public function test_store_new_record_properly(): void

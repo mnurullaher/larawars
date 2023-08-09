@@ -3,20 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Services\StarshipService;
+use Illuminate\Http\JsonResponse;
 
 class StarshipController extends Controller
 {
     public function __construct(private StarshipService $starshipService){}
 
-    public function index() {
-        return $this->starshipService->getALlStarships();
+    public function index(): JsonResponse
+    {
+        return response()->json([
+            $this->starshipService->getALlStarships()
+        ]);
     }
 
-    public function detail(int $id) {
+    public function detail(int $id): JsonResponse
+    {
         $starship = $this->starshipService->detail($id);
         if ($starship) {
-            return json_encode($starship);
+            return response()->json([
+                $starship
+            ]);
         }
-        return json_encode(['error' => 'Not Found']);
+        return response()->json([
+            'error' => 'Not Found'
+        ], 404);
     }
 }

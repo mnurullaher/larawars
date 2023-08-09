@@ -7,6 +7,7 @@ use App\Services\PeopleService;
 use App\Services\StarshipService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\TestUtils;
 
 class StarshipServiceTest extends TestCase
 {
@@ -19,9 +20,7 @@ class StarshipServiceTest extends TestCase
         parent::setUp();
         $this->starshipService = new StarshipService(new PeopleService());
         $starships = Starship::factory()->count(20)->make();
-        foreach ($starships as $starship) {
-            $this->starshipArr[] = $starship;
-        }
+        $this->starshipArr = TestUtils::getResourceArray($starships);
     }
 
     public function test_store_new_record_properly(): void
