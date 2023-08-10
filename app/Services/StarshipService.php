@@ -2,11 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\People;
 use App\Models\Starship;
-use App\Services\Interfaces\ResourceService;
+use App\Services\Interfaces\StorableResource;
 
-class StarshipService implements ResourceService {
+class StarshipService implements StorableResource {
 
 
     public function __construct(private PeopleService $peopleService)

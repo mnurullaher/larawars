@@ -2,7 +2,7 @@
 
 namespace App\Services\Interfaces;
 
-interface ResourceService
+interface StorableResource
 {
     public function store(array $resourceArr);
 }
