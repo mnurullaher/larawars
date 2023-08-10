@@ -6,6 +6,7 @@ use App\Models\People;
 use App\Models\Planet;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ExplorationController extends Controller
 {
@@ -31,6 +32,9 @@ class ExplorationController extends Controller
             foreach ($this->getExplorers($explorerNames) as $explorer) {
                 $explorer->sense_force = true;
                 $explorer->update();
+                DB::table('force_sersers')->insert([
+                    'people_id' => $explorer->id
+                ]);
             }
 
             return response()->json([

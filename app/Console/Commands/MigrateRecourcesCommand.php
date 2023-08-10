@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\People;
 use App\Services\Interfaces\StorableResource;
 use Exception;
 use App\Client\ResourceClient;
@@ -10,6 +11,7 @@ use App\Services\PlanetService;
 use App\Services\StarshipService;
 use App\Services\VehicleService;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class MigrateRecourcesCommand extends Command
 {
@@ -83,7 +85,16 @@ class MigrateRecourcesCommand extends Command
         ];
         $this->info('Equipping planets with force');
         $this->planetService->equipWithForce($planetsWithForce);
-        $this->info('Force equipping completed');
+        $this->info('Force equipping of planets completed');
+
+        $this->info('People equipping with force');
+        $forceSenserIds = DB::table('force_sersers')->pluck('people_id');
+        foreach ($forceSenserIds as $id) {
+            People::find($id)->sense_force = true;
+
+        }
+        $this->info('Force equipping of people completed');
+
     }
 
     private function migrateResource(string $resource, StorableResource $service): void {
