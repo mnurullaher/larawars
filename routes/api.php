@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ExplorationController;
 use App\Http\Controllers\InvasionController;
 use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\PlanetController;
@@ -36,6 +37,7 @@ Route::get('/vehicles', [VehicleController::class, 'index'])->middleware('auth:s
 Route::get('/vehicles/{id}', [VehicleController::class, 'detail'])->middleware('auth:sanctum');;
 
 Route::post('/invade', [InvasionController::class, 'invade']);
+Route::post('/explore', [ExplorationController::class, 'explore']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

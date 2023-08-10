@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Invasion;
 use App\Models\People;
 use App\Models\Planet;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class InvasionController extends Controller
 {
-    public function invade(Request $request) {
+    public function invade(Request $request): JsonResponse
+    {
         $request->validate([
             'invaders' => ['required', 'array'],
             'planet' => 'required',
