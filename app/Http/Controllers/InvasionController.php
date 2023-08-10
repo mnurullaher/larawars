@@ -27,12 +27,6 @@ class InvasionController extends Controller
             ], 400);
         }
 
-        if (!($this->hasStarship($invaderNames) && $this->hasVehicle($invaderNames))) {
-            return response()->json([
-                'message' => "This expedition is not possible!. Those invaders don't have necessary equipments."
-            ], 400);
-        }
-
         $invasion = Invasion::create([
             'title' => $title,
             'planet_id' => Planet::where('name', $planetName)->first()->id
@@ -58,6 +52,9 @@ class InvasionController extends Controller
             if (!People::where('name', $invaderName)->exists()) {
                 return $this->resourceValidationError("Not this time. You may have $invaderName in another universe!");
             }
+        }
+        if (!($this->hasStarship($invaderNames) && $this->hasVehicle($invaderNames))) {
+            return $this->resourceValidationError("This expedition is not possible!. Those invaders don't have necessary equipments.");
         }
         if (!Planet::where('name', $planetName)->exists()) {
             return $this->resourceValidationError("Non-existed planets cannot be invaded");

@@ -29,7 +29,8 @@ class StarshipFactory extends Factory
             'consumables' => 'consumable',
             'hyperdrive_rating' => 'rating',
             'MGLT' => 'mglt',
-            'starship_class' => 'class'
+            'starship_class' => 'class',
+            'owner_id' => null
         ];
     }
 }

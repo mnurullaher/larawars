@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\Interfaces\ResourceService;
+use App\Services\Interfaces\StorableResource;
 use Exception;
 use App\Client\ResourceClient;
 use App\Services\PeopleService;
@@ -73,7 +73,7 @@ class MigrateRecourcesCommand extends Command
         $this->equipWithVehicle($peopleWithVehicles);
     }
 
-    private function migrateResource(string $resource, ResourceService $service): void {
+    private function migrateResource(string $resource, StorableResource $service): void {
         $this->info('Fetching ' . $resource . ' data...');
         try {
             $resourceArr = ResourceClient::getResource($resource);
