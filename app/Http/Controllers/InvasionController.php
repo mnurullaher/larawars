@@ -85,7 +85,7 @@ class InvasionController extends Controller
 
     private function hasStarship($invaderNames): bool {
         foreach ($this->getInvaders($invaderNames) as $invader) {
-            if (count($invader->starships) > 0) {
+            if (!$invader->starships->isEmpty()) {
                 return true;
             }
         }
@@ -94,7 +94,7 @@ class InvasionController extends Controller
 
     private function hasVehicle($invaderNames): bool {
         foreach ($this->getInvaders($invaderNames) as $invader) {
-            if (count($invader->vehicles) > 0) {
+            if (!$invader->vehicles->isEmpty()) {
                 return true;
             }
         }

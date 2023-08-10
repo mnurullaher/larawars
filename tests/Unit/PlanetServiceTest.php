@@ -10,7 +10,7 @@ use Tests\TestUtils;
 
 class PlanetServiceTest extends TestCase
 {
-    use RefreshDatabase;
+//    use RefreshDatabase;
     private PlanetService $planetService;
     private array $planetArr = array();
 
@@ -30,7 +30,7 @@ class PlanetServiceTest extends TestCase
         $this->assertDatabaseHas('planets', $this->planetArr[0]->toArray());
     }
 
-    public function test_do_not_recreate_record_with_same_name() {
+    public function test_do_not_recreate_record_with_same_name():void {
         $this->planetService->store($this->planetArr);
         $this->planetArr[0]->diameter = 'updated';
         $this->planetService->store($this->planetArr);
@@ -39,5 +39,15 @@ class PlanetServiceTest extends TestCase
         $this->assertDatabaseHas('planets', [
             'diameter' => 'updated'
         ]);
+    }
+
+    public function test_equipping_with_force():void {
+        $this->planetService->store($this->planetArr);
+        $planetOne = $this->planetArr[0];
+        $planetTwo = $this->planetArr[1];
+        $this->planetService->equipWithForce([$planetOne->name, $planetTwo->name]);
+
+        $this->assertTrue($this->planetService->getByName($planetOne->name)->has_force);
+        $this->assertTrue($this->planetService->getByName($planetTwo->name)->has_force);
     }
 }

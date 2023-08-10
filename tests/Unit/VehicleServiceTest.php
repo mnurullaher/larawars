@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\People;
 use App\Models\Vehicle;
 use App\Services\PeopleService;
 use App\Services\VehicleService;
@@ -13,12 +14,14 @@ class VehicleServiceTest extends TestCase
 {
     use RefreshDatabase;
     private VehicleService $vehicleService;
+    private PeopleService $peopleService;
     private array $vehicleArr = array();
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->vehicleService = new VehicleService(new PeopleService());
+        $this->peopleService = new PeopleService();
+        $this->vehicleService = new VehicleService($this->peopleService);
         $vehicles = Vehicle::factory()->count(20)->make();
         $this->vehicleArr = TestUtils::getResourceArray($vehicles);
     }
@@ -31,7 +34,7 @@ class VehicleServiceTest extends TestCase
         $this->assertDatabaseHas('vehicles', $this->vehicleArr[0]->toArray());
     }
 
-    public function test_do_not_recreate_record_with_same_name() {
+    public function test_do_not_recreate_record_with_same_name():void {
         $this->vehicleService->store($this->vehicleArr);
         $this->vehicleArr[0]->model = 'updated';
         $this->vehicleService->store($this->vehicleArr);
@@ -40,5 +43,16 @@ class VehicleServiceTest extends TestCase
         $this->assertDatabaseHas('vehicles', [
             'model' => 'updated'
         ]);
+    }
+
+    public function test_attach_vehicle_to_person(): void {
+        $people = People::factory()->count(2)->make();
+        $peopleArr = TestUtils::getResourceArray($people);
+        $this->peopleService->store($peopleArr);
+        $this->vehicleService->store($this->vehicleArr);
+        $this->vehicleService->attachToPerson($peopleArr[0]->name, $this->vehicleArr[0]->name);
+        $owner = $this->peopleService->getByName($peopleArr[0]->name);
+
+        $this->assertNotEmpty($owner->vehicles);
     }
 }

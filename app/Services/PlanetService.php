@@ -24,6 +24,10 @@ class PlanetService implements StorableResource {
         return Planet::find($id);
     }
 
+    public function getByName($name) {
+        return Planet::where('name', $name)->first();
+    }
+
     public function equipWithForce($planetNames): void {
         foreach ($planetNames as $planetName) {
             $planet = Planet::where('name', $planetName)->first();
