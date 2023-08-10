@@ -17,7 +17,8 @@ class People extends Model
         'skin_color',
         'eye_color',
         'birth_year',
-        'gender'
+        'gender',
+        'sense_force'
     ];
 
     public function starships() {

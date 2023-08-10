@@ -71,6 +71,19 @@ class MigrateRecourcesCommand extends Command
             'Qui-Gon Jinn' => 'Vulture Droid'
         ];
         $this->equipWithVehicle($peopleWithVehicles);
+
+        $planetsWithForce = [
+            'Tatooine',
+            'Yavin IV',
+            'Dagobah',
+            'Endor',
+            'Naboo',
+            'Eriadu',
+            'Dantooine'
+        ];
+        $this->info('Equipping planets with force');
+        $this->planetService->equipWithForce($planetsWithForce);
+        $this->info('Force equipping completed');
     }
 
     private function migrateResource(string $resource, StorableResource $service): void {

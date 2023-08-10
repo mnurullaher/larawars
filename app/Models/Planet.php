@@ -18,7 +18,8 @@ class Planet extends Model
         'gravity',
         'terrain',
         'surface_water',
-        'population'
+        'population',
+        'has_force'
     ];
 
     public function invasion() {

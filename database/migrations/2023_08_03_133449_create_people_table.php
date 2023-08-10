@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('eye_color');
             $table->string('birth_year');
             $table->string('gender');
+            $table->boolean('sense_force')->default(false);
             $table->timestamps();
         });;
     }

@@ -27,7 +27,20 @@ class ExplorationController extends Controller
             ], 400);
         }
 
-        return response()->json('go ahead');
+        if (Planet::where('name', $planetName)->first()->has_force) {
+            foreach ($this->getExplorers($explorerNames) as $explorer) {
+                $explorer->sense_force = true;
+                $explorer->update();
+            }
+
+            return response()->json([
+                "Explorers now can sense force!"
+            ]);
+        }
+
+        return response()->json([
+            "Exploration completed but nothing has founded"
+        ]);
     }
 
 
@@ -58,11 +71,11 @@ class ExplorationController extends Controller
         ];
     }
     private function getExplorers($explorerNames): array {
-        $explorer = array();
+        $explorers = array();
         foreach ($explorerNames as $explorerName) {
-            $explorer[] = People::where('name', $explorerName)->first();
+            $explorers[] = People::where('name', $explorerName)->first();
         }
-        return $explorer;
+        return $explorers;
     }
     private function hasStarship($explorerNames): bool {
         foreach ($this->getExplorers($explorerNames) as $explorer) {
