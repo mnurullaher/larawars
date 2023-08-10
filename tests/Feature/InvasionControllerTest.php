@@ -43,22 +43,22 @@ class InvasionControllerTest extends TestCase
         ]);
     }
 
-    public function test_return_404_for_invalid_invaders(): void
+    public function test_return_400_for_invalid_invaders(): void
     {
-//        dd($this->planetArr[0]->id);
         $response = $this->post('/api/invade', [
             'title' => 'Test Invasion',
                 'invaders' => [
-                    $this->peopleArr[0]->name, $this->peopleArr[1]->name, 'gandalf'
+                    $this->peopleArr[0]->name, $this->peopleArr[1]->name, 'Gandalf'
                 ],
                 'planet' => $this->planetArr[0]
         ]);
         $data = $response->json();
-        $this->assertEquals('Not this time. You may have gandalf in another universe!', $data['message']);
+
+        $this->assertEquals('Not this time. You may have Gandalf in another universe!', $data['message']);
         $response->assertStatus(400);
     }
 
-    public function test_return_404_for_few_invaders() {
+    public function test_return_400_for_few_invaders() {
         $response = $this->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
@@ -67,11 +67,12 @@ class InvasionControllerTest extends TestCase
             'planet' => $this->planetArr[0]
         ]);
         $data = $response->json();
+
         $this->assertEquals('You can not invade a planet with a handful of people!', $data['message']);
         $response->assertStatus(400);
     }
 
-    public function test_return_404_for_invader_duplication() {
+    public function test_return_400_for_invader_duplication() {
         $response = $this->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
@@ -80,11 +81,12 @@ class InvasionControllerTest extends TestCase
             'planet' => $this->planetArr[0]
         ]);
         $data = $response->json();
+
         $this->assertEquals('You can not call a person twice for an invasion!', $data['message']);
         $response->assertStatus(400);
     }
 
-    public function test_return_404_for_lack_of_starships() {
+    public function test_return_400_for_lack_of_starships() {
         $response = $this->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
@@ -93,13 +95,14 @@ class InvasionControllerTest extends TestCase
             'planet' => $this->planetArr[0]
         ]);
         $data = $response->json();
+
         $this->assertEquals(
             'This expedition is not possible!. Those invaders don\'t have necessary equipments.',
             $data['message']);
         $response->assertStatus(400);
     }
 
-    public function test_return_404_for_lack_of_vehicles() {
+    public function test_return_400_for_lack_of_vehicles() {
         $response = $this->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
@@ -108,13 +111,14 @@ class InvasionControllerTest extends TestCase
             'planet' => $this->planetArr[0]
         ]);
         $data = $response->json();
+
         $this->assertEquals(
             'This expedition is not possible!. Those invaders don\'t have necessary equipments.',
             $data['message']);
         $response->assertStatus(400);
     }
 
-    public function test_return_404_for_already_invaded_planets() {
+    public function test_return_400_for_already_invaded_planets() {
         $response = $this->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
@@ -123,13 +127,14 @@ class InvasionControllerTest extends TestCase
             'planet' => $this->planetArr[0]->name
         ]);
         $data = $response->json();
+
         $this->assertEquals(
             'Planet has already invaded',
             $data['message']);
         $response->assertStatus(400);
     }
 
-    public function test_return_404_for_non_existed_planets() {
+    public function test_return_400_for_non_existed_planets() {
         $response = $this->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
@@ -138,6 +143,7 @@ class InvasionControllerTest extends TestCase
             'planet' => 'Middle Earth'
         ]);
         $data = $response->json();
+
         $this->assertEquals(
             'Non-existed planets cannot be invaded',
             $data['message']);
@@ -146,18 +152,19 @@ class InvasionControllerTest extends TestCase
 
     public function test_create_invasion_for_valid_requests() {
         $response = $this->post('/api/invade', [
-            'title' => 'Test Invasion',
+            'title' => 'Successful Test Invasion',
             'invaders' => [
                 $this->peopleArr[0]->name, $this->peopleArr[1]->name
             ],
             'planet' => $this->planetArr[1]->name
         ]);
         $data = $response->json();
+
         $this->assertEquals(
             'Planet invaded successfully!',
             $data['message']);
         $this->assertDatabaseHas('invasions', [
-            'title' => 'Test Invasion'
+            'title' => 'Successful Test Invasion'
         ]);
         $response->assertStatus(200);
     }

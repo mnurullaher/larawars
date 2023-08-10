@@ -88,10 +88,9 @@ class MigrateRecourcesCommand extends Command
         $this->info('Force equipping of planets completed');
 
         $this->info('People equipping with force');
-        $forceSenserIds = DB::table('force_sersers')->pluck('people_id');
+        $forceSenserIds = DB::table('force_feelers')->pluck('people_id');
         foreach ($forceSenserIds as $id) {
             People::find($id)->sense_force = true;
-
         }
         $this->info('Force equipping of people completed');
 

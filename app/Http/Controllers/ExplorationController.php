@@ -32,25 +32,25 @@ class ExplorationController extends Controller
             foreach ($this->getExplorers($explorerNames) as $explorer) {
                 $explorer->sense_force = true;
                 $explorer->update();
-                DB::table('force_sersers')->insert([
+                DB::table('force_feelers')->insert([
                     'people_id' => $explorer->id
                 ]);
             }
 
             return response()->json([
-                "Explorers now can sense force!"
+                'message' => "Explorers now can sense force!"
             ]);
         }
 
         return response()->json([
-            "Exploration completed but nothing has founded"
+            'message' => "Exploration completed but nothing has founded"
         ]);
     }
 
 
     private function validateResources($explorerNames, $planetName): array {
         if(count(array_unique($explorerNames)) != count($explorerNames)) {
-            return $this->resourceValidationError("No one can go more than one expedition at the same time");
+            return $this->resourceValidationError("Explorers cannot clone themselves yet!");
         }
 
         foreach ($explorerNames as $explorerName) {
