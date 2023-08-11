@@ -26,20 +26,20 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::get('/people', [PeopleController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/people/{id}', [PeopleController::class, 'detail'])->middleware('auth:sanctum');;
+Route::get('/people/{id}', [PeopleController::class, 'detail'])->middleware('auth:sanctum');
 
 Route::get('/planets', [PlanetController::class, 'index'])->middleware('auth:sanctum');;
-Route::get('/planets/{id}', [PlanetController::class, 'detail'])->middleware('auth:sanctum');;
+Route::get('/planets/{id}', [PlanetController::class, 'detail'])->middleware('auth:sanctum');
 
-Route::get('/starships', [StarshipController::class, 'index'])->middleware('auth:sanctum');;
-Route::get('/starships/{id}', [StarshipController::class, 'detail'])->middleware('auth:sanctum');;
+Route::get('/starships', [StarshipController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/starships/{id}', [StarshipController::class, 'detail'])->middleware('auth:sanctum');
 
-Route::get('/vehicles', [VehicleController::class, 'index'])->middleware('auth:sanctum');;
-Route::get('/vehicles/{id}', [VehicleController::class, 'detail'])->middleware('auth:sanctum');;
+Route::get('/vehicles', [VehicleController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/vehicles/{id}', [VehicleController::class, 'detail'])->middleware('auth:sanctum');
 
-Route::post('/invade', [InvasionController::class, 'invade']);
-Route::post('/explore', [ExplorationController::class, 'explore']);
-Route::post('/immigrate', [ImmigrationController::class, 'immigrate']);
+Route::post('/invade', [InvasionController::class, 'invade'])->middleware('auth:sanctum');
+Route::post('/explore', [ExplorationController::class, 'explore'])->middleware('auth:sanctum');
+Route::post('/immigrate', [ImmigrationController::class, 'immigrate'])->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

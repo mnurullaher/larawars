@@ -6,6 +6,7 @@ use App\Models\Invasion;
 use App\Models\People;
 use App\Models\Planet;
 use App\Models\Starship;
+use App\Models\User;
 use App\Models\Vehicle;
 use App\Services\PeopleService;
 use App\Services\PlanetService;
@@ -27,6 +28,7 @@ class InvasionControllerTest extends TestCase
     private array $planetArr;
     private array $starshipArr;
     private array $vehicleArr;
+    private User $user;
 
     protected function setUp(): void
     {
@@ -36,6 +38,7 @@ class InvasionControllerTest extends TestCase
         $this->starshipService = new StarshipService($this->peopleService);
         $this->vehicleService = new VehicleService($this->peopleService);
         $this->prepareDatabase();
+        $this->user = TestUtils::createUser();
 
         Invasion::create([
             'title' => 'Test Invasion',
@@ -45,7 +48,7 @@ class InvasionControllerTest extends TestCase
 
     public function test_return_400_for_invalid_invaders(): void
     {
-        $response = $this->post('/api/invade', [
+        $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
                 'invaders' => [
                     $this->peopleArr[0]->name, $this->peopleArr[1]->name, 'Gandalf'
@@ -59,7 +62,7 @@ class InvasionControllerTest extends TestCase
     }
 
     public function test_return_400_for_few_invaders() {
-        $response = $this->post('/api/invade', [
+        $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
                 $this->peopleArr[0]->name
@@ -73,7 +76,7 @@ class InvasionControllerTest extends TestCase
     }
 
     public function test_return_400_for_invader_duplication() {
-        $response = $this->post('/api/invade', [
+        $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
                 $this->peopleArr[0]->name, $this->peopleArr[0]->name
@@ -87,7 +90,7 @@ class InvasionControllerTest extends TestCase
     }
 
     public function test_return_400_for_lack_of_starships() {
-        $response = $this->post('/api/invade', [
+        $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
                 $this->peopleArr[1]->name, $this->peopleArr[2]->name
@@ -103,7 +106,7 @@ class InvasionControllerTest extends TestCase
     }
 
     public function test_return_400_for_lack_of_vehicles() {
-        $response = $this->post('/api/invade', [
+        $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
                 $this->peopleArr[0]->name, $this->peopleArr[2]->name
@@ -119,7 +122,7 @@ class InvasionControllerTest extends TestCase
     }
 
     public function test_return_400_for_already_invaded_planets() {
-        $response = $this->post('/api/invade', [
+        $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
                 $this->peopleArr[0]->name, $this->peopleArr[1]->name
@@ -135,7 +138,7 @@ class InvasionControllerTest extends TestCase
     }
 
     public function test_return_400_for_non_existed_planets() {
-        $response = $this->post('/api/invade', [
+        $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
                 $this->peopleArr[0]->name, $this->peopleArr[1]->name
@@ -151,7 +154,7 @@ class InvasionControllerTest extends TestCase
     }
 
     public function test_create_invasion_for_valid_requests() {
-        $response = $this->post('/api/invade', [
+        $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Successful Test Invasion',
             'invaders' => [
                 $this->peopleArr[0]->name, $this->peopleArr[1]->name

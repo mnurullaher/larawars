@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\People;
 use App\Models\Planet;
 use App\Models\Starship;
+use App\Models\User;
 use App\Services\PeopleService;
 use App\Services\PlanetService;
 use App\Services\StarshipService;
@@ -22,6 +23,7 @@ class ImmigrationControllerTest extends TestCase
     private StarshipService $starshipService;
     private array $peopleArr;
     private array $planetArr;
+    private User $user;
 
     protected function setUp(): void
     {
@@ -30,11 +32,12 @@ class ImmigrationControllerTest extends TestCase
         $this->planetService = new PlanetService();
         $this->starshipService = new StarshipService($this->peopleService);
         $this->prepareDatabase();
+        $this->user = TestUtils::createUser();
     }
 
     public function test_return_400_for_invalid_pilots(): void
     {
-        $response = $this->post('/api/immigrate', [
+        $response = $this->actingAs($this->user)->post('/api/immigrate', [
             'pilot' => $this->peopleArr[1]->name,
             'immigrants' => [
                 $this->peopleArr[0]->name, $this->peopleArr[1]->name
@@ -49,7 +52,7 @@ class ImmigrationControllerTest extends TestCase
 
     public function test_return_400_for_pilots_without_starships(): void
     {
-        $response = $this->post('/api/immigrate', [
+        $response = $this->actingAs($this->user)->post('/api/immigrate', [
             'pilot' => 'Gandalf',
             'immigrants' => [
                 $this->peopleArr[0]->name, $this->peopleArr[1]->name
@@ -64,7 +67,7 @@ class ImmigrationControllerTest extends TestCase
 
     public function test_return_400_for_invalid_immigrants(): void
     {
-        $response = $this->post('/api/immigrate', [
+        $response = $this->actingAs($this->user)->post('/api/immigrate', [
             'pilot' => $this->peopleArr[0]->name,
             'immigrants' => [
                 $this->peopleArr[0]->name, 'Gandalf'
@@ -82,7 +85,7 @@ class ImmigrationControllerTest extends TestCase
 
     public function test_return_400_for_immigrants_name_duplication(): void
     {
-        $response = $this->post('/api/immigrate', [
+        $response = $this->actingAs($this->user)->post('/api/immigrate', [
             'pilot' => $this->peopleArr[0]->name,
             'immigrants' => [
                 $this->peopleArr[0]->name, $this->peopleArr[0]->name
@@ -97,7 +100,7 @@ class ImmigrationControllerTest extends TestCase
 
     public function test_return_400_for_already_immigrated_immigrants(): void
     {
-        $response = $this->post('/api/immigrate', [
+        $response = $this->actingAs($this->user)->post('/api/immigrate', [
             'pilot' => $this->peopleArr[0]->name,
             'immigrants' => [
                 $this->peopleArr[1]->name, $this->peopleArr[2]->name
@@ -114,7 +117,7 @@ class ImmigrationControllerTest extends TestCase
 
     public function test_return_400_for_non_existed_planets(): void
     {
-        $response = $this->post('/api/immigrate', [
+        $response = $this->actingAs($this->user)->post('/api/immigrate', [
             'pilot' => $this->peopleArr[0]->name,
             'immigrants' => [
                 $this->peopleArr[0]->name, $this->peopleArr[1]->name
@@ -131,7 +134,7 @@ class ImmigrationControllerTest extends TestCase
 
     public function test_return_go_back_message_for_overpopulated_planets(): void
     {
-        $response = $this->post('/api/immigrate', [
+        $response = $this->actingAs($this->user)->post('/api/immigrate', [
             'pilot' => $this->peopleArr[0]->name,
             'immigrants' => [
                 $this->peopleArr[0]->name, $this->peopleArr[1]->name

@@ -6,6 +6,7 @@ use App\Models\Invasion;
 use App\Models\People;
 use App\Models\Planet;
 use App\Models\Starship;
+use App\Models\User;
 use App\Models\Vehicle;
 use App\Services\PeopleService;
 use App\Services\PlanetService;
@@ -26,6 +27,7 @@ class ExplorationControllerTest extends TestCase
     private array $peopleArr;
     private array $planetArr;
     private array $starshipArr;
+    private User $user;
 
     protected function setUp(): void
     {
@@ -34,11 +36,12 @@ class ExplorationControllerTest extends TestCase
         $this->planetService = new PlanetService();
         $this->starshipService = new StarshipService($this->peopleService);
         $this->prepareDatabase();
+        $this->user = TestUtils::createUser();
     }
 
     public function test_return_400_for_invalid_explorers(): void
     {
-        $response = $this->post('/api/explore', [
+        $response = $this->actingAs($this->user)->post('/api/explore', [
             'explorers' => [
                 $this->peopleArr[0]->name, $this->peopleArr[1]->name, 'Gandalf'
             ],
@@ -51,7 +54,7 @@ class ExplorationControllerTest extends TestCase
     }
 
     public function test_return_400_for_explorer_duplication() {
-        $response = $this->post('/api/explore', [
+        $response = $this->actingAs($this->user)->post('/api/explore', [
             'explorers' => [
                 $this->peopleArr[0]->name, $this->peopleArr[0]->name
             ],
@@ -64,7 +67,7 @@ class ExplorationControllerTest extends TestCase
     }
 
     public function test_return_400_for_lack_of_starships() {
-        $response = $this->post('/api/explore', [
+        $response = $this->actingAs($this->user)->post('/api/explore', [
             'explorers' => [
                 $this->peopleArr[1]->name
             ],
@@ -79,7 +82,7 @@ class ExplorationControllerTest extends TestCase
     }
 
     public function test_return_400_for_non_existed_planets() {
-        $response = $this->post('/api/explore', [
+        $response = $this->actingAs($this->user)->post('/api/explore', [
             'explorers' => [
                 $this->peopleArr[0]->name,
             ],
@@ -94,7 +97,7 @@ class ExplorationControllerTest extends TestCase
     }
 
     public function test_explorers_gain_sense_force_ability_with_valid_requests() {
-        $response = $this->post('/api/explore', [
+        $response = $this->actingAs($this->user)->post('/api/explore', [
             'explorers' => [
                 $this->peopleArr[0]->name, $this->peopleArr[1]->name
             ],
@@ -110,7 +113,7 @@ class ExplorationControllerTest extends TestCase
     }
 
     public function test_explorers_gain_nothing_after_valid_requests_with_forceless_planets() {
-        $response = $this->post('/api/explore', [
+        $response = $this->actingAs($this->user)->post('/api/explore', [
             'explorers' => [
                 $this->peopleArr[0]->name, $this->peopleArr[1]->name
             ],
