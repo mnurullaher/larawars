@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('birth_year');
             $table->string('gender');
             $table->boolean('sense_force')->default(false);
+            $table->foreignId('immigrated_planet_id')->nullable()->constrained()->on('planets');
             $table->timestamps();
         });;
     }

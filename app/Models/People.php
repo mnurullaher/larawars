@@ -28,4 +28,8 @@ class People extends Model
     public function vehicles() {
         return $this->hasMany(Vehicle::class, 'owner_id');
     }
+
+    public function immigratedPlanet() {
+        return $this->belongsTo(Planet::class, 'immigrated_planet_id');
+    }
 }

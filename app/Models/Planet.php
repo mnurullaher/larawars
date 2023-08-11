@@ -25,4 +25,8 @@ class Planet extends Model
     public function invasion() {
         return $this->hasOne(Invasion::class);
     }
+
+    public function immigrants() {
+        return $this->hasMany(People::class, 'immigrated_planet_id');
+    }
 }
