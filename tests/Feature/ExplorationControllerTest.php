@@ -105,9 +105,7 @@ class ExplorationControllerTest extends TestCase
         $this->assertEquals(
             'Explorers now can sense force!',
             $data['message']);
-        $this->assertDatabaseHas('force_feelers', [
-            'people_id' => $this->peopleService->getByName($this->peopleArr[1]->name)->id
-        ]);
+        $this->assertEquals(true, $this->peopleService->getByName($this->peopleArr[0]->name)->sense_force);
         $response->assertStatus(200);
     }
 

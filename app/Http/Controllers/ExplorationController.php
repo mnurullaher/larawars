@@ -32,9 +32,6 @@ class ExplorationController extends Controller
             foreach ($this->getExplorers($explorerNames) as $explorer) {
                 $explorer->sense_force = true;
                 $explorer->update();
-                DB::table('force_feelers')->insert([
-                    'people_id' => $explorer->id
-                ]);
             }
 
             return response()->json([

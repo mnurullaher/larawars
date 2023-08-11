@@ -87,13 +87,6 @@ class MigrateRecourcesCommand extends Command
         $this->planetService->equipWithForce($planetsWithForce);
         $this->info('Force equipping of planets completed');
 
-        $this->info('People equipping with force');
-        $forceSenserIds = DB::table('force_feelers')->pluck('people_id');
-        foreach ($forceSenserIds as $id) {
-            People::find($id)->sense_force = true;
-        }
-        $this->info('Force equipping of people completed');
-
         $this->info('Updating planet population');
         foreach ($this->planetService->getALlPlanets() as $planet) {
             $planet->population = intval($planet->population) + count($planet->immigrants);
