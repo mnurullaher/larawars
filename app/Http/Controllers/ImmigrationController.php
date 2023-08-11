@@ -40,7 +40,7 @@ class ImmigrationController extends Controller
             $immigrant->update();
         }
 
-        $planet->population = $planet->population + count($immigrantNames);
+        $planet->population = intVal($planet->population) + count($immigrantNames);
         $planet->update();
 
         return response()->json([
@@ -99,11 +99,5 @@ class ImmigrationController extends Controller
     private function hasStarship($pilotName): bool {
         $pilot = People::where('name', $pilotName)->first();
         return !$pilot->starships->isEmpty();
-//        if (!$pilot->starships->isEmpty()) {
-//            return true;
-//        }
-//        return false;
-//        dd($pilot->starships->isEmpy());
-//        return $pilot->starships->isEmpy();
     }
 }
