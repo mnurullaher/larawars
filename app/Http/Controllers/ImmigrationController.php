@@ -11,14 +11,17 @@ class ImmigrationController extends Controller
 {
     public function immigrate(Request $request): JsonResponse {
         $request->validate([
+            'pilot' => 'required',
             'immigrants' => ['required', 'array'],
             'planet' => 'required'
         ]);
 
+        $pilotName = $request->input('pilot');
         $immigrantNames = $request->input('immigrants');
         $planetName = $request->input('planet');
+        $planet = Planet::where('name', $planetName)->first();
 
-        $resourceValidation = $this->validateResources($immigrantNames, $planetName);
+        $resourceValidation = $this->validateResources($immigrantNames, $planetName, $pilotName);
 
         if (!$resourceValidation['isValid']) {
             return response()->json([
@@ -26,14 +29,33 @@ class ImmigrationController extends Controller
             ], 400);
         }
 
+        if (intval($planet->population) >= 2000000) {
+            return response()->json([
+                'message' => 'Go back to your homeland! ' . $planetName . ' can\'t accept more people!'
+            ]);
+        }
+
+        foreach ($this->getImmigrants($immigrantNames) as $immigrant) {
+            $immigrant->immigrated_planet_id = $planet->id;
+            $immigrant->update();
+        }
+
+        $planet->population = $planet->population + count($immigrantNames);
+        $planet->update();
+
         return response()->json([
-            'message' => "Go ahead"
+            'message' => "Welcome to " . $planetName . '\'s generous lands!'
         ]);
     }
 
-    private function validateResources($immigrantNames, $planetName): array {
-        if(count(array_unique($immigrantNames)) != count($immigrantNames)) {
-            return $this->resourceValidationError("Duplication in immigrant name");
+    private function validateResources($immigrantNames, $planetName, $pilotName): array {
+
+        if (!People::where('name', $pilotName)->exists()) {
+            return $this->resourceValidationError('You can not call a pilot from another universe!');
+        }
+
+        if (!$this->hasStarship($pilotName)) {
+            return $this->resourceValidationError("Pilots need to have starships!");
         }
 
         foreach ($immigrantNames as $immigrantName) {
@@ -41,9 +63,17 @@ class ImmigrationController extends Controller
                 return $this->resourceValidationError("Only people belongs to this universe can immigrate in this lands!");
             }
         }
-        if (!$this->hasStarship($immigrantNames)) {
-            return $this->resourceValidationError("At least one of immigrants need to have a starship!");
+
+        if(count(array_unique($immigrantNames)) != count($immigrantNames)) {
+            return $this->resourceValidationError("Duplication in immigrant name");
         }
+
+        foreach ($this->getImmigrants($immigrantNames) as $immigrant) {
+            if ($immigrant->immigratedPlanet) {
+                return $this->resourceValidationError($immigrant->name . " has already immigrated");
+            }
+        }
+
         if (!Planet::where('name', $planetName)->exists()) {
             return $this->resourceValidationError("Immigrate to non-existed planets is impossible");
         }
@@ -66,12 +96,14 @@ class ImmigrationController extends Controller
         return $immigrants;
     }
 
-    private function hasStarship($immigrantNames): bool {
-        foreach ($this->getImmigrants($immigrantNames) as $immigrant) {
-            if (!$immigrant->starships->isEmpty()) {
-                return true;
-            }
-        }
-        return false;
+    private function hasStarship($pilotName): bool {
+        $pilot = People::where('name', $pilotName)->first();
+        return !$pilot->starships->isEmpty();
+//        if (!$pilot->starships->isEmpty()) {
+//            return true;
+//        }
+//        return false;
+//        dd($pilot->starships->isEmpy());
+//        return $pilot->starships->isEmpy();
     }
 }

@@ -94,6 +94,13 @@ class MigrateRecourcesCommand extends Command
         }
         $this->info('Force equipping of people completed');
 
+        $this->info('Updating planet population');
+        foreach ($this->planetService->getALlPlanets() as $planet) {
+            $planet->population = intval($planet->population) + count($planet->immigrants);
+            $planet->update();
+        }
+        $this->info('Planet population updating completed');
+
     }
 
     private function migrateResource(string $resource, StorableResource $service): void {
