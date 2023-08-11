@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExplorationController;
+use App\Http\Controllers\ImmigrationController;
 use App\Http\Controllers\InvasionController;
 use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\PlanetController;
@@ -38,6 +39,7 @@ Route::get('/vehicles/{id}', [VehicleController::class, 'detail'])->middleware('
 
 Route::post('/invade', [InvasionController::class, 'invade']);
 Route::post('/explore', [ExplorationController::class, 'explore']);
+Route::post('/immigrate', [ImmigrationController::class, 'immigrate']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

@@ -83,7 +83,7 @@ class ExplorationController extends Controller
     }
     private function hasStarship($explorerNames): bool {
         foreach ($this->getExplorers($explorerNames) as $explorer) {
-            if (count($explorer->starships) > 0) {
+            if (!$explorer->starships->isEmpty()) {
                 return true;
             }
         }
