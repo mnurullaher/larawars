@@ -16,7 +16,8 @@ class PeopleController extends Controller
         ]);
     }
 
-    public function detail(int $id): JsonResponse {
+    public function detail(int $id): JsonResponse
+    {
         $person = $this->peopleService->detail($id);
         if ($person) {
             return response()->json([

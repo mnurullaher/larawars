@@ -54,7 +54,8 @@ class PeopleControllerTest extends TestCase
         Artisan::call('migrate:refresh');
     }
 
-    public function test_should_return_not_found_for_non_existed_person() {
+    public function test_should_return_not_found_for_non_existed_person(): void
+    {
         $this->peopleService->store($this->peopleArr);
 
         $response = $this->actingAs($this->user)->get('/api/people/' . count($this->peopleArr) + 1);

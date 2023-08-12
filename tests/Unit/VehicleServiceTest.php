@@ -34,7 +34,8 @@ class VehicleServiceTest extends TestCase
         $this->assertDatabaseHas('vehicles', $this->vehicleArr[0]->toArray());
     }
 
-    public function test_do_not_recreate_record_with_same_name():void {
+    public function test_do_not_recreate_record_with_same_name(): void
+    {
         $this->vehicleService->store($this->vehicleArr);
         $this->vehicleArr[0]->model = 'updated';
         $this->vehicleService->store($this->vehicleArr);
@@ -45,7 +46,8 @@ class VehicleServiceTest extends TestCase
         ]);
     }
 
-    public function test_attach_vehicle_to_person(): void {
+    public function test_attach_vehicle_to_person(): void
+    {
         $people = People::factory()->count(2)->make();
         $peopleArr = TestUtils::getResourceArray($people);
         $this->peopleService->store($peopleArr);

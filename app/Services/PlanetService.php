@@ -7,7 +7,7 @@ use App\Services\Interfaces\StorableResource;
 
 class PlanetService implements StorableResource {
 
-    public function store(array $planets)
+    public function store(array $planets): void
     {
         foreach ($planets as $planet) {
             Planet::updateOrCreate(['name' => $planet->name], json_decode(json_encode($planet), true));

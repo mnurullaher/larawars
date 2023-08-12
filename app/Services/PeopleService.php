@@ -7,7 +7,7 @@ use App\Services\Interfaces\StorableResource;
 
 class PeopleService implements StorableResource {
 
-    public function store(array $people)
+    public function store(array $people): void
     {
         foreach ($people as $person) {
             People::updateOrCreate(['name' => $person->name], json_decode(json_encode($person), true));

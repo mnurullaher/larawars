@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 
 class ImmigrationController extends Controller
 {
-    public function immigrate(Request $request): JsonResponse {
+    public function immigrate(Request $request): JsonResponse
+    {
         $request->validate([
             'pilot' => 'required',
             'immigrants' => ['required', 'array'],
@@ -48,7 +49,8 @@ class ImmigrationController extends Controller
         ]);
     }
 
-    private function validateResources($immigrantNames, $planetName, $pilotName): array {
+    private function validateResources($immigrantNames, $planetName, $pilotName): array
+    {
 
         if (!People::where('name', $pilotName)->exists()) {
             return $this->resourceValidationError('You can not call a pilot from another universe!');
@@ -81,7 +83,8 @@ class ImmigrationController extends Controller
         return ['isValid' => true];
     }
 
-    private function resourceValidationError($message): array {
+    private function resourceValidationError($message): array
+    {
         return [
             'isValid' => false,
             'message' => $message,
@@ -96,7 +99,8 @@ class ImmigrationController extends Controller
         return $immigrants;
     }
 
-    private function hasStarship($pilotName): bool {
+    private function hasStarship($pilotName): bool
+    {
         $pilot = People::where('name', $pilotName)->first();
         return !$pilot->starships->isEmpty();
     }

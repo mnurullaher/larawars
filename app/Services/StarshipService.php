@@ -12,7 +12,7 @@ class StarshipService implements StorableResource {
     {
     }
 
-    public function store(array $starships)
+    public function store(array $starships): void
     {
         foreach ($starships as $starship) {
             Starship::updateOrCreate(['name' => $starship->name], json_decode(json_encode($starship), true));

@@ -56,7 +56,8 @@ class VehicleControllerTest extends TestCase
         Artisan::call('migrate:refresh');
     }
 
-    public function test_should_return_not_found_for_non_existed_planet() {
+    public function test_should_return_not_found_for_non_existed_planet(): void
+    {
         $this->vehicleService->store($this->vehicleArr);
 
         $response = $this->actingAs($this->user)->get('/api/planets/' . count($this->vehicleArr) + 1);

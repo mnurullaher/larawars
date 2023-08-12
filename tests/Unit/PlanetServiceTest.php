@@ -30,7 +30,8 @@ class PlanetServiceTest extends TestCase
         $this->assertDatabaseHas('planets', $this->planetArr[0]->toArray());
     }
 
-    public function test_do_not_recreate_record_with_same_name():void {
+    public function test_do_not_recreate_record_with_same_name(): void
+    {
         $this->planetService->store($this->planetArr);
         $this->planetArr[0]->diameter = 'updated';
         $this->planetService->store($this->planetArr);
@@ -41,7 +42,8 @@ class PlanetServiceTest extends TestCase
         ]);
     }
 
-    public function test_equipping_with_force():void {
+    public function test_equipping_with_force(): void
+    {
         $this->planetService->store($this->planetArr);
         $planetOne = $this->planetArr[0];
         $planetTwo = $this->planetArr[1];

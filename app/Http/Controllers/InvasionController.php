@@ -43,7 +43,8 @@ class InvasionController extends Controller
         ]);
     }
 
-    private function validateResources($invaderNames, $planetName): array {
+    private function validateResources($invaderNames, $planetName): array
+    {
         if(count(array_unique($invaderNames)) != count($invaderNames)) {
             return $this->resourceValidationError("You can not call a person twice for an invasion!");
         }
@@ -68,14 +69,16 @@ class InvasionController extends Controller
         return ['isValid' => true];
     }
 
-    private function resourceValidationError($message): array {
+    private function resourceValidationError($message): array
+    {
         return [
             'isValid' => false,
             'message' => $message,
         ];
     }
 
-    private function getInvaders($invaderNames): array {
+    private function getInvaders($invaderNames): array
+    {
         $invaders = array();
         foreach ($invaderNames as $invaderName) {
             $invaders[] = People::where('name', $invaderName)->first();
@@ -83,7 +86,8 @@ class InvasionController extends Controller
         return $invaders;
     }
 
-    private function hasStarship($invaderNames): bool {
+    private function hasStarship($invaderNames): bool
+    {
         foreach ($this->getInvaders($invaderNames) as $invader) {
             if (!$invader->starships->isEmpty()) {
                 return true;
@@ -92,7 +96,8 @@ class InvasionController extends Controller
         return false;
     }
 
-    private function hasVehicle($invaderNames): bool {
+    private function hasVehicle($invaderNames): bool
+    {
         foreach ($this->getInvaders($invaderNames) as $invader) {
             if (!$invader->vehicles->isEmpty()) {
                 return true;

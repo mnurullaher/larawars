@@ -61,7 +61,8 @@ class InvasionControllerTest extends TestCase
         $response->assertStatus(400);
     }
 
-    public function test_return_400_for_few_invaders() {
+    public function test_return_400_for_few_invaders(): void
+    {
         $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
@@ -75,7 +76,8 @@ class InvasionControllerTest extends TestCase
         $response->assertStatus(400);
     }
 
-    public function test_return_400_for_invader_duplication() {
+    public function test_return_400_for_invader_duplication(): void
+    {
         $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
@@ -89,7 +91,8 @@ class InvasionControllerTest extends TestCase
         $response->assertStatus(400);
     }
 
-    public function test_return_400_for_lack_of_starships() {
+    public function test_return_400_for_lack_of_starships(): void
+    {
         $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
@@ -105,7 +108,8 @@ class InvasionControllerTest extends TestCase
         $response->assertStatus(400);
     }
 
-    public function test_return_400_for_lack_of_vehicles() {
+    public function test_return_400_for_lack_of_vehicles(): void
+    {
         $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
@@ -121,7 +125,8 @@ class InvasionControllerTest extends TestCase
         $response->assertStatus(400);
     }
 
-    public function test_return_400_for_already_invaded_planets() {
+    public function test_return_400_for_already_invaded_planets(): void
+    {
         $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
@@ -137,7 +142,8 @@ class InvasionControllerTest extends TestCase
         $response->assertStatus(400);
     }
 
-    public function test_return_400_for_non_existed_planets() {
+    public function test_return_400_for_non_existed_planets(): void
+    {
         $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
@@ -153,7 +159,8 @@ class InvasionControllerTest extends TestCase
         $response->assertStatus(400);
     }
 
-    public function test_create_invasion_for_valid_requests() {
+    public function test_create_invasion_for_valid_requests(): void
+    {
         $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Successful Test Invasion',
             'invaders' => [
@@ -172,7 +179,8 @@ class InvasionControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    private function prepareDatabase(): void {
+    private function prepareDatabase(): void
+    {
         $peopleArr = TestUtils::getResourceArray(People::factory()->count(3)->make());
         $this->peopleArr = $peopleArr;
         $this->peopleService->store($peopleArr);

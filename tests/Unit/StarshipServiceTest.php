@@ -35,7 +35,8 @@ class StarshipServiceTest extends TestCase
         $this->assertDatabaseHas('starships', $this->starshipArr[0]->toArray());
     }
 
-    public function test_do_not_recreate_record_with_same_name():void {
+    public function test_do_not_recreate_record_with_same_name(): void
+    {
         $this->starshipService->store($this->starshipArr);
         $this->starshipArr[0]->model = 'updated';
         $this->starshipService->store($this->starshipArr);
@@ -46,7 +47,8 @@ class StarshipServiceTest extends TestCase
         ]);
     }
 
-    public function test_attach_starship_to_person(): void {
+    public function test_attach_starship_to_person(): void
+    {
         $people = People::factory()->count(1)->make();
         $peopleArr = TestUtils::getResourceArray($people);
         $this->peopleService->store($peopleArr);

@@ -30,7 +30,8 @@ class PeopleServiceTest extends TestCase
         $this->assertDatabaseHas('people', $this->peopleArr[0]->toArray());
     }
 
-    public function test_do_not_recreate_record_with_same_name() {
+    public function test_do_not_recreate_record_with_same_name(): void
+    {
         $this->peopleService->store($this->peopleArr);
         $this->peopleArr[0]->hair_color = 'updated';
         $this->peopleService->store($this->peopleArr);

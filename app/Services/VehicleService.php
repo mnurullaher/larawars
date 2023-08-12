@@ -12,7 +12,7 @@ class VehicleService implements StorableResource {
     {
     }
 
-    public function store(array $vehicles)
+    public function store(array $vehicles): void
     {
         foreach ($vehicles as $vehicle) {
             Vehicle::updateOrCreate(['name' => $vehicle->name], json_decode(json_encode($vehicle), true));

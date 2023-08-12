@@ -44,8 +44,8 @@ class ExplorationController extends Controller
         ]);
     }
 
-
-    private function validateResources($explorerNames, $planetName): array {
+    private function validateResources($explorerNames, $planetName): array
+    {
         if(count(array_unique($explorerNames)) != count($explorerNames)) {
             return $this->resourceValidationError("Explorers cannot clone themselves yet!");
         }
@@ -64,21 +64,23 @@ class ExplorationController extends Controller
 
         return ['isValid' => true];
     }
-
-    private function resourceValidationError($message): array {
+    private function resourceValidationError($message): array
+    {
         return [
             'isValid' => false,
             'message' => $message,
         ];
     }
-    private function getExplorers($explorerNames): array {
+    private function getExplorers($explorerNames): array
+    {
         $explorers = array();
         foreach ($explorerNames as $explorerName) {
             $explorers[] = People::where('name', $explorerName)->first();
         }
         return $explorers;
     }
-    private function hasStarship($explorerNames): bool {
+    private function hasStarship($explorerNames): bool
+    {
         foreach ($this->getExplorers($explorerNames) as $explorer) {
             if (!$explorer->starships->isEmpty()) {
                 return true;

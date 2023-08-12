@@ -54,7 +54,8 @@ class PlanetControllerTest extends TestCase
         Artisan::call('migrate:refresh');
     }
 
-    public function test_should_return_not_found_for_non_existed_planet() {
+    public function test_should_return_not_found_for_non_existed_planet(): void
+    {
         $this->planetService->store($this->planetArr);
 
         $response = $this->actingAs($this->user)->get('/api/planets/' . count($this->planetArr) + 1);

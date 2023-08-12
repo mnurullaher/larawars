@@ -150,7 +150,8 @@ class ImmigrationControllerTest extends TestCase
         );
     }
 
-    private function prepareDatabase(): void {
+    private function prepareDatabase(): void
+    {
         $planetArr = TestUtils::getResourceArray(Planet::factory()->count(2)->make());
         $this->planetArr = $planetArr;
         $this->planetService->store($planetArr);

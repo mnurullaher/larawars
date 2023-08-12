@@ -53,7 +53,8 @@ class ExplorationControllerTest extends TestCase
         $response->assertStatus(400);
     }
 
-    public function test_return_400_for_explorer_duplication() {
+    public function test_return_400_for_explorer_duplication(): void
+    {
         $response = $this->actingAs($this->user)->post('/api/explore', [
             'explorers' => [
                 $this->peopleArr[0]->name, $this->peopleArr[0]->name
@@ -66,7 +67,8 @@ class ExplorationControllerTest extends TestCase
         $response->assertStatus(400);
     }
 
-    public function test_return_400_for_lack_of_starships() {
+    public function test_return_400_for_lack_of_starships(): void
+    {
         $response = $this->actingAs($this->user)->post('/api/explore', [
             'explorers' => [
                 $this->peopleArr[1]->name
@@ -81,7 +83,8 @@ class ExplorationControllerTest extends TestCase
         $response->assertStatus(400);
     }
 
-    public function test_return_400_for_non_existed_planets() {
+    public function test_return_400_for_non_existed_planets(): void
+    {
         $response = $this->actingAs($this->user)->post('/api/explore', [
             'explorers' => [
                 $this->peopleArr[0]->name,
@@ -96,7 +99,8 @@ class ExplorationControllerTest extends TestCase
         $response->assertStatus(400);
     }
 
-    public function test_explorers_gain_sense_force_ability_with_valid_requests() {
+    public function test_explorers_gain_sense_force_ability_with_valid_requests(): void
+    {
         $response = $this->actingAs($this->user)->post('/api/explore', [
             'explorers' => [
                 $this->peopleArr[0]->name, $this->peopleArr[1]->name
@@ -112,7 +116,8 @@ class ExplorationControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_explorers_gain_nothing_after_valid_requests_with_forceless_planets() {
+    public function test_explorers_gain_nothing_after_valid_requests_with_forceless_planets(): void
+    {
         $response = $this->actingAs($this->user)->post('/api/explore', [
             'explorers' => [
                 $this->peopleArr[0]->name, $this->peopleArr[1]->name
@@ -126,7 +131,8 @@ class ExplorationControllerTest extends TestCase
             'Exploration completed but nothing has founded',
             $data['message']);
     }
-    private function prepareDatabase() {
+    private function prepareDatabase(): void
+    {
         $peopleArr = TestUtils::getResourceArray(People::factory()->count(3)->make());
         $this->peopleArr = $peopleArr;
         $this->peopleService->store($peopleArr);

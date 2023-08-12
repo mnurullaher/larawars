@@ -35,7 +35,6 @@ class StarshipControllerTest extends TestCase
         $response = $this->actingAs($this->user)->get('/api/starships');
         $data = $response->json()[0];
 
-
         $response->assertStatus(200);
         $this->assertEquals(10, count($data['data']));
         $this->assertEquals(20, $data['total']);
@@ -56,7 +55,8 @@ class StarshipControllerTest extends TestCase
         Artisan::call('migrate:refresh');
     }
 
-    public function test_should_return_not_found_for_non_existed_planet() {
+    public function test_should_return_not_found_for_non_existed_planet(): void
+    {
         $this->starshipService->store($this->starshipArr);
 
         $response = $this->actingAs($this->user)->get('/api/planets/' . count($this->starshipArr) + 1);
