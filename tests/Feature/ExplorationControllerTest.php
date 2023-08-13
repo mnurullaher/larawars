@@ -2,18 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Models\Invasion;
 use App\Models\People;
 use App\Models\Planet;
 use App\Models\Starship;
 use App\Models\User;
-use App\Models\Vehicle;
 use App\Services\PeopleService;
 use App\Services\PlanetService;
 use App\Services\StarshipService;
-use App\Services\VehicleService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Tests\TestUtils;
 

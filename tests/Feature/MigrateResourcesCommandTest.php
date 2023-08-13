@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Services\PeopleService;
 use App\Services\PlanetService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 

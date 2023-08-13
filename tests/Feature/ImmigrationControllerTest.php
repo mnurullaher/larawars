@@ -10,7 +10,6 @@ use App\Services\PeopleService;
 use App\Services\PlanetService;
 use App\Services\StarshipService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Tests\TestUtils;
 

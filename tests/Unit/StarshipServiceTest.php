@@ -6,7 +6,6 @@ use App\Models\People;
 use App\Models\Starship;
 use App\Services\PeopleService;
 use App\Services\StarshipService;
-use Illuminate\Database\Eloquent\Casts\ArrayObject;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Tests\TestUtils;
