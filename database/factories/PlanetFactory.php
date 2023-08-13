@@ -25,7 +25,7 @@ class PlanetFactory extends Factory
             'gravity' => 'gravity',
             'terrain' => 'terrain',
             'surface_water' => 'water',
-            'population' => 'population',
+            'population' => '100000',
             'has_force' => false
         ];
     }

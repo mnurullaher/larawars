@@ -34,7 +34,7 @@ class StarshipService implements StorableResource {
     }
 
     public function attachToPerson($personName, $starshipName): void {
-        $starship = Starship::where('name', $starshipName)->first();
+        $starship = $this->getByName($starshipName);
         $owner_id = $this->peopleService->getByName($personName)->id;
         $starship->owner_id = $owner_id;
         $starship->update();

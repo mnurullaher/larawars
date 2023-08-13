@@ -149,6 +149,35 @@ class ImmigrationControllerTest extends TestCase
         );
     }
 
+    public function test_immigration_takes_place_with_valid_conditions(): void
+    {
+        $immigrantOneName = $this->peopleArr[0]->name;
+        $immigrantTwoName = $this->peopleArr[1]->name;
+        $planetName = $this->planetArr[0]->name;
+        $population = $this->planetService->getByName($planetName)->population;
+        $response = $this->actingAs($this->user)->post('/api/immigrate', [
+            'pilot' => $this->peopleArr[0]->name,
+            'immigrants' => [
+                $immigrantOneName, $immigrantTwoName
+            ],
+            'planet' => $planetName
+        ]);
+
+        $data = $response->json();
+        $immigrantOne = $this->peopleService->getByName($immigrantOneName);
+        $immigrantTwo = $this->peopleService->getByName($immigrantTwoName);
+        $planet = $this->planetService->getByName($planetName);
+
+        $response->assertStatus(200);
+        $this->assertEquals(
+            'Welcome to ' . $this->planetArr[0]->name .'\'s generous lands!',
+            $data['message']
+        );
+        $this->assertEquals($planet->id, $immigrantOne->immigrated_planet_id);
+        $this->assertEquals($planet->id, $immigrantTwo->immigrated_planet_id );
+        $this->assertEquals($planet->population, intval($population) + 2);
+    }
+
     private function prepareDatabase(): void
     {
         $planetArr = TestUtils::getResourceArray(Planet::factory()->count(2)->make());
