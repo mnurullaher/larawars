@@ -23,7 +23,7 @@ class Vehicle extends Model
         'vehicle_class'
     ];
 
-    public function people(): BelongsTo
+    public function owner(): BelongsTo
     {
         return $this->belongsTo(People::class, 'owner_id');
     }

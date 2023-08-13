@@ -21,7 +21,7 @@ class Invasion extends Model
         return $this->belongsTo(Planet::class);
     }
 
-    public function people(): BelongsToMany
+    public function invaders(): BelongsToMany
     {
         return $this->belongsToMany(
             People::class,

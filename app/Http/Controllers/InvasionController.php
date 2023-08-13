@@ -35,7 +35,7 @@ class InvasionController extends Controller
         ]);
 
         foreach ($this->getInvaders($invaderNames) as $invader) {
-            $invasion->people()->attach($invader);
+            $invasion->invaders()->attach($invader);
         }
 
         return response()->json([

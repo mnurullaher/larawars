@@ -27,7 +27,7 @@ class Starship extends Model
         'owner_id'
     ];
 
-    public function people(): BelongsTo
+    public function owner(): BelongsTo
     {
         return $this->belongsTo(People::class, 'owner_id');
     }
