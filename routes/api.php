@@ -25,22 +25,20 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::get('/people', [PeopleController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/people/{id}', [PeopleController::class, 'detail'])->middleware('auth:sanctum');
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/people', [PeopleController::class, 'index']);
+    Route::get('/people/{id}', [PeopleController::class, 'detail']);
 
-Route::get('/planets', [PlanetController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/planets/{id}', [PlanetController::class, 'detail'])->middleware('auth:sanctum');
+    Route::get('/planets', [PlanetController::class, 'index']);
+    Route::get('/planets/{id}', [PlanetController::class, 'detail']);
 
-Route::get('/starships', [StarshipController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/starships/{id}', [StarshipController::class, 'detail'])->middleware('auth:sanctum');
+    Route::get('/starships', [StarshipController::class, 'index']);
+    Route::get('/starships/{id}', [StarshipController::class, 'detail']);
 
-Route::get('/vehicles', [VehicleController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/vehicles/{id}', [VehicleController::class, 'detail'])->middleware('auth:sanctum');
+    Route::get('/vehicles', [VehicleController::class, 'index']);
+    Route::get('/vehicles/{id}', [VehicleController::class, 'detail']);
 
-Route::post('/invade', [InvasionController::class, 'invade'])->middleware('auth:sanctum');
-Route::post('/explore', [ExplorationController::class, 'explore'])->middleware('auth:sanctum');
-Route::post('/immigrate', [ImmigrationController::class, 'immigrate'])->middleware('auth:sanctum');
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::post('/invade', [InvasionController::class, 'invade']);
+    Route::post('/explore', [ExplorationController::class, 'explore']);
+    Route::post('/immigrate', [ImmigrationController::class, 'immigrate']);
 });
