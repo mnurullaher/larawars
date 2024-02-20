@@ -24,7 +24,7 @@ return new class extends Migration
             $table->boolean('sense_force')->default(false);
             $table->foreignId('immigrated_planet_id')->nullable()->constrained()->on('planets');
             $table->timestamps();
-        });;
+        });
     }
 
     /**

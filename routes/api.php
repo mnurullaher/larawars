@@ -28,7 +28,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/people', [PeopleController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/people/{id}', [PeopleController::class, 'detail'])->middleware('auth:sanctum');
 
-Route::get('/planets', [PlanetController::class, 'index'])->middleware('auth:sanctum');;
+Route::get('/planets', [PlanetController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/planets/{id}', [PlanetController::class, 'detail'])->middleware('auth:sanctum');
 
 Route::get('/starships', [StarshipController::class, 'index'])->middleware('auth:sanctum');
@@ -44,5 +44,3 @@ Route::post('/immigrate', [ImmigrationController::class, 'immigrate'])->middlewa
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-

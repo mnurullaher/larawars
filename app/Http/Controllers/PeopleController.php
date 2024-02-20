@@ -7,12 +7,14 @@ use Illuminate\Http\JsonResponse;
 
 class PeopleController extends Controller
 {
-    public function __construct(private PeopleService $peopleService){}
+    public function __construct(private PeopleService $peopleService)
+    {
+    }
 
     public function index(): JsonResponse
     {
         return response()->json([
-            $this->peopleService->getAllPeople()
+            $this->peopleService->getAllPeople(),
         ]);
     }
 
@@ -21,11 +23,12 @@ class PeopleController extends Controller
         $person = $this->peopleService->detail($id);
         if ($person) {
             return response()->json([
-                $person
+                $person,
             ]);
         }
+
         return response()->json([
-            'error' => 'Not Found'
+            'error' => 'Not Found',
         ], 404);
     }
 }

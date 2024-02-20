@@ -18,10 +18,15 @@ class ImmigrationControllerTest extends TestCase
     use RefreshDatabase;
 
     private PeopleService $peopleService;
+
     private PlanetService $planetService;
+
     private StarshipService $starshipService;
+
     private array $peopleArr;
+
     private array $planetArr;
+
     private User $user;
 
     protected function setUp(): void
@@ -39,9 +44,9 @@ class ImmigrationControllerTest extends TestCase
         $response = $this->actingAs($this->user)->post('/api/immigrate', [
             'pilot' => $this->peopleArr[1]->name,
             'immigrants' => [
-                $this->peopleArr[0]->name, $this->peopleArr[1]->name
+                $this->peopleArr[0]->name, $this->peopleArr[1]->name,
             ],
-            'planet' => $this->planetArr[0]->name
+            'planet' => $this->planetArr[0]->name,
         ]);
         $data = $response->json();
 
@@ -54,9 +59,9 @@ class ImmigrationControllerTest extends TestCase
         $response = $this->actingAs($this->user)->post('/api/immigrate', [
             'pilot' => 'Gandalf',
             'immigrants' => [
-                $this->peopleArr[0]->name, $this->peopleArr[1]->name
+                $this->peopleArr[0]->name, $this->peopleArr[1]->name,
             ],
-            'planet' => $this->planetArr[0]->name
+            'planet' => $this->planetArr[0]->name,
         ]);
         $data = $response->json();
 
@@ -69,9 +74,9 @@ class ImmigrationControllerTest extends TestCase
         $response = $this->actingAs($this->user)->post('/api/immigrate', [
             'pilot' => $this->peopleArr[0]->name,
             'immigrants' => [
-                $this->peopleArr[0]->name, 'Gandalf'
+                $this->peopleArr[0]->name, 'Gandalf',
             ],
-            'planet' => $this->planetArr[0]->name
+            'planet' => $this->planetArr[0]->name,
         ]);
         $data = $response->json();
 
@@ -87,9 +92,9 @@ class ImmigrationControllerTest extends TestCase
         $response = $this->actingAs($this->user)->post('/api/immigrate', [
             'pilot' => $this->peopleArr[0]->name,
             'immigrants' => [
-                $this->peopleArr[0]->name, $this->peopleArr[0]->name
+                $this->peopleArr[0]->name, $this->peopleArr[0]->name,
             ],
-            'planet' => $this->planetArr[0]->name
+            'planet' => $this->planetArr[0]->name,
         ]);
         $data = $response->json();
 
@@ -102,15 +107,15 @@ class ImmigrationControllerTest extends TestCase
         $response = $this->actingAs($this->user)->post('/api/immigrate', [
             'pilot' => $this->peopleArr[0]->name,
             'immigrants' => [
-                $this->peopleArr[1]->name, $this->peopleArr[2]->name
+                $this->peopleArr[1]->name, $this->peopleArr[2]->name,
             ],
-            'planet' => $this->planetArr[0]->name
+            'planet' => $this->planetArr[0]->name,
         ]);
         $data = $response->json();
 
         $response->assertStatus(400);
         $this->assertEquals(
-            $this->peopleArr[2]->name . ' has already immigrated',  $data['message']
+            $this->peopleArr[2]->name.' has already immigrated', $data['message']
         );
     }
 
@@ -119,15 +124,15 @@ class ImmigrationControllerTest extends TestCase
         $response = $this->actingAs($this->user)->post('/api/immigrate', [
             'pilot' => $this->peopleArr[0]->name,
             'immigrants' => [
-                $this->peopleArr[0]->name, $this->peopleArr[1]->name
+                $this->peopleArr[0]->name, $this->peopleArr[1]->name,
             ],
-            'planet' => 'Middle Earth'
+            'planet' => 'Middle Earth',
         ]);
         $data = $response->json();
 
         $response->assertStatus(400);
         $this->assertEquals(
-            'Immigrate to non-existed planets is impossible',  $data['message']
+            'Immigrate to non-existed planets is impossible', $data['message']
         );
     }
 
@@ -136,15 +141,15 @@ class ImmigrationControllerTest extends TestCase
         $response = $this->actingAs($this->user)->post('/api/immigrate', [
             'pilot' => $this->peopleArr[0]->name,
             'immigrants' => [
-                $this->peopleArr[0]->name, $this->peopleArr[1]->name
+                $this->peopleArr[0]->name, $this->peopleArr[1]->name,
             ],
-            'planet' => $this->planetArr[1]->name
+            'planet' => $this->planetArr[1]->name,
         ]);
         $data = $response->json();
 
         $response->assertStatus(200);
         $this->assertEquals(
-            'Go back to your homeland! ' .  $this->planetArr[1]->name . ' can\'t accept more people!',
+            'Go back to your homeland! '.$this->planetArr[1]->name.' can\'t accept more people!',
             $data['message']
         );
     }
@@ -158,9 +163,9 @@ class ImmigrationControllerTest extends TestCase
         $response = $this->actingAs($this->user)->post('/api/immigrate', [
             'pilot' => $this->peopleArr[0]->name,
             'immigrants' => [
-                $immigrantOneName, $immigrantTwoName
+                $immigrantOneName, $immigrantTwoName,
             ],
-            'planet' => $planetName
+            'planet' => $planetName,
         ]);
 
         $data = $response->json();
@@ -170,11 +175,11 @@ class ImmigrationControllerTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertEquals(
-            'Welcome to ' . $this->planetArr[0]->name .'\'s generous lands!',
+            'Welcome to '.$this->planetArr[0]->name.'\'s generous lands!',
             $data['message']
         );
         $this->assertEquals($planet->id, $immigrantOne->immigrated_planet_id);
-        $this->assertEquals($planet->id, $immigrantTwo->immigrated_planet_id );
+        $this->assertEquals($planet->id, $immigrantTwo->immigrated_planet_id);
         $this->assertEquals($planet->population, intval($population) + 2);
     }
 

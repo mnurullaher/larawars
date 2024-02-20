@@ -24,7 +24,7 @@ class Starship extends Model
         'hyperdrive_rating',
         'MGLT',
         'starship_class',
-        'owner_id'
+        'owner_id',
     ];
 
     public function owner(): BelongsTo

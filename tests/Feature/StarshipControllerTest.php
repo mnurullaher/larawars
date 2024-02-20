@@ -16,8 +16,10 @@ class StarshipControllerTest extends TestCase
     use RefreshDatabase;
 
     private StarshipService $starshipService;
+
     private User $user;
-    private array $starshipArr = array();
+
+    private array $starshipArr = [];
 
     protected function setUp(): void
     {
@@ -43,14 +45,14 @@ class StarshipControllerTest extends TestCase
 
     public function test_should_return_one_planet(): void
     {
-        $requestedId =  count($this->starshipArr) - 1;
+        $requestedId = count($this->starshipArr) - 1;
         $this->starshipService->store($this->starshipArr);
 
-        $response = $this->actingAs($this->user)->get('/api/starships/' . $requestedId);
+        $response = $this->actingAs($this->user)->get('/api/starships/'.$requestedId);
         $data = $response->json()[0];
 
         $response->assertStatus(200);
-        $this->assertEquals($this->starshipArr[$requestedId-1]->name, $data['name']);
+        $this->assertEquals($this->starshipArr[$requestedId - 1]->name, $data['name']);
 
         Artisan::call('migrate:refresh');
     }
@@ -59,7 +61,7 @@ class StarshipControllerTest extends TestCase
     {
         $this->starshipService->store($this->starshipArr);
 
-        $response = $this->actingAs($this->user)->get('/api/planets/' . count($this->starshipArr) + 1);
+        $response = $this->actingAs($this->user)->get('/api/planets/'.count($this->starshipArr) + 1);
         $data = $response->json();
 
         $response->assertStatus(404);

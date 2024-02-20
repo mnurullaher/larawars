@@ -13,9 +13,12 @@ use Tests\TestUtils;
 class PlanetControllerTest extends TestCase
 {
     use RefreshDatabase;
+
     private PlanetService $planetService;
+
     private User $user;
-    private array $planetArr = array();
+
+    private array $planetArr = [];
 
     protected function setUp(): void
     {
@@ -33,7 +36,6 @@ class PlanetControllerTest extends TestCase
         $response = $this->actingAs($this->user)->get('/api/planets');
         $data = $response->json()[0];
 
-
         $response->assertStatus(200);
         $this->assertEquals(10, count($data['data']));
         $this->assertEquals(20, $data['total']);
@@ -42,14 +44,14 @@ class PlanetControllerTest extends TestCase
 
     public function test_should_return_one_planet(): void
     {
-        $requestedId =  count($this->planetArr) - 1;
+        $requestedId = count($this->planetArr) - 1;
         $this->planetService->store($this->planetArr);
 
-        $response = $this->actingAs($this->user)->get('/api/planets/' . $requestedId);
+        $response = $this->actingAs($this->user)->get('/api/planets/'.$requestedId);
         $data = $response->json()[0];
 
         $response->assertStatus(200);
-        $this->assertEquals($this->planetArr[$requestedId-1]->name, $data['name']);
+        $this->assertEquals($this->planetArr[$requestedId - 1]->name, $data['name']);
 
         Artisan::call('migrate:refresh');
     }
@@ -58,7 +60,7 @@ class PlanetControllerTest extends TestCase
     {
         $this->planetService->store($this->planetArr);
 
-        $response = $this->actingAs($this->user)->get('/api/planets/' . count($this->planetArr) + 1);
+        $response = $this->actingAs($this->user)->get('/api/planets/'.count($this->planetArr) + 1);
         $data = $response->json();
 
         $response->assertStatus(404);

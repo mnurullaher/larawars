@@ -20,7 +20,7 @@ class People extends Model
         'eye_color',
         'birth_year',
         'gender',
-        'sense_force'
+        'sense_force',
     ];
 
     public function starships(): HasMany

@@ -11,7 +11,9 @@ use Tests\TestCase;
 class MigrateResourcesCommandTest extends TestCase
 {
     use RefreshDatabase;
+
     private PlanetService $planetService;
+
     private PeopleService $peopleService;
 
     public function setUp(): void
@@ -28,7 +30,7 @@ class MigrateResourcesCommandTest extends TestCase
             'people' => 82,
             'planets' => 60,
             'vehicles' => 39,
-            'starships' => 36
+            'starships' => 36,
         ];
         Artisan::call('resources:migrate');
 

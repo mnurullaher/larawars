@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\People;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +20,7 @@ class PeopleFactory extends Factory
             'eye_color' => 'color',
             'birth_year' => '1BBB23',
             'gender' => $this->faker->randomElement(['male', 'female']),
-            'immigrated_planet_id' => null
+            'immigrated_planet_id' => null,
         ];
     }
 }

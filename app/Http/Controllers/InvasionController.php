@@ -15,7 +15,7 @@ class InvasionController extends Controller
         $request->validate([
             'invaders' => ['required', 'array'],
             'planet' => 'required',
-            'title' => 'required'
+            'title' => 'required',
         ]);
 
         $title = $request->input('title');
@@ -23,15 +23,15 @@ class InvasionController extends Controller
         $planetName = $request->input('planet');
         $resourceValidation = $this->validateResources($invaderNames, $planetName);
 
-        if (!$resourceValidation['isValid']) {
+        if (! $resourceValidation['isValid']) {
             return response()->json([
-                'message' => $resourceValidation['message']
+                'message' => $resourceValidation['message'],
             ], 400);
         }
 
         $invasion = Invasion::create([
             'title' => $title,
-            'planet_id' => Planet::where('name', $planetName)->first()->id
+            'planet_id' => Planet::where('name', $planetName)->first()->id,
         ]);
 
         foreach ($this->getInvaders($invaderNames) as $invader) {
@@ -39,28 +39,28 @@ class InvasionController extends Controller
         }
 
         return response()->json([
-            'message' => 'Planet invaded successfully!'
+            'message' => 'Planet invaded successfully!',
         ]);
     }
 
     private function validateResources($invaderNames, $planetName): array
     {
-        if(count(array_unique($invaderNames)) != count($invaderNames)) {
-            return $this->resourceValidationError("You can not call a person twice for an invasion!");
+        if (count(array_unique($invaderNames)) != count($invaderNames)) {
+            return $this->resourceValidationError('You can not call a person twice for an invasion!');
         }
         if (count($invaderNames) < 2) {
-            return $this->resourceValidationError("You can not invade a planet with a handful of people!");
+            return $this->resourceValidationError('You can not invade a planet with a handful of people!');
         }
         foreach ($invaderNames as $invaderName) {
-            if (!People::where('name', $invaderName)->exists()) {
+            if (! People::where('name', $invaderName)->exists()) {
                 return $this->resourceValidationError("Not this time. You may have $invaderName in another universe!");
             }
         }
-        if (!($this->hasStarship($invaderNames) && $this->hasVehicle($invaderNames))) {
+        if (! ($this->hasStarship($invaderNames) && $this->hasVehicle($invaderNames))) {
             return $this->resourceValidationError("This expedition is not possible!. Those invaders don't have necessary equipments.");
         }
-        if (!Planet::where('name', $planetName)->exists()) {
-            return $this->resourceValidationError("Non-existed planets cannot be invaded");
+        if (! Planet::where('name', $planetName)->exists()) {
+            return $this->resourceValidationError('Non-existed planets cannot be invaded');
         }
         if (Planet::where('name', $planetName)->first()->invasion) {
             return $this->resourceValidationError('Planet has already invaded');
@@ -79,30 +79,33 @@ class InvasionController extends Controller
 
     private function getInvaders($invaderNames): array
     {
-        $invaders = array();
+        $invaders = [];
         foreach ($invaderNames as $invaderName) {
             $invaders[] = People::where('name', $invaderName)->first();
         }
+
         return $invaders;
     }
 
     private function hasStarship($invaderNames): bool
     {
         foreach ($this->getInvaders($invaderNames) as $invader) {
-            if (!$invader->starships->isEmpty()) {
+            if (! $invader->starships->isEmpty()) {
                 return true;
             }
         }
+
         return false;
     }
 
     private function hasVehicle($invaderNames): bool
     {
         foreach ($this->getInvaders($invaderNames) as $invader) {
-            if (!$invader->vehicles->isEmpty()) {
+            if (! $invader->vehicles->isEmpty()) {
                 return true;
             }
         }
+
         return false;
     }
 }

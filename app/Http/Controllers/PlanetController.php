@@ -7,12 +7,14 @@ use Illuminate\Http\JsonResponse;
 
 class PlanetController extends Controller
 {
-    public function __construct(private PlanetService $planetService){}
+    public function __construct(private PlanetService $planetService)
+    {
+    }
 
     public function index(): JsonResponse
     {
         return response()->json([
-            $this->planetService->getALlPlanets()
+            $this->planetService->getALlPlanets(),
         ]);
     }
 
@@ -21,11 +23,12 @@ class PlanetController extends Controller
         $planet = $this->planetService->detail($id);
         if ($planet) {
             return response()->json([
-                $planet
+                $planet,
             ]);
         }
+
         return response()->json([
-            'error' => 'Not Found'
+            'error' => 'Not Found',
         ], 404);
     }
 }

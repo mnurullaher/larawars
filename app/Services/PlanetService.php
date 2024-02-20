@@ -5,8 +5,8 @@ namespace App\Services;
 use App\Models\Planet;
 use App\Services\Interfaces\StorableResource;
 
-class PlanetService implements StorableResource {
-
+class PlanetService implements StorableResource
+{
     public function store(array $planets): void
     {
         foreach ($planets as $planet) {
@@ -24,11 +24,13 @@ class PlanetService implements StorableResource {
         return Planet::find($id);
     }
 
-    public function getByName($name) {
+    public function getByName($name)
+    {
         return Planet::where('name', $name)->first();
     }
 
-    public function equipWithForce($planetNames): void {
+    public function equipWithForce($planetNames): void
+    {
         foreach ($planetNames as $planetName) {
             $planet = $this->getByName($planetName);
             $planet->has_force = true;

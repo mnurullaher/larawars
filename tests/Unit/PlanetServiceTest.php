@@ -11,8 +11,10 @@ use Tests\TestUtils;
 class PlanetServiceTest extends TestCase
 {
     use RefreshDatabase;
+
     private PlanetService $planetService;
-    private array $planetArr = array();
+
+    private array $planetArr = [];
 
     protected function setUp(): void
     {
@@ -38,7 +40,7 @@ class PlanetServiceTest extends TestCase
 
         $this->assertDatabaseCount('planets', 20);
         $this->assertDatabaseHas('planets', [
-            'diameter' => 'updated'
+            'diameter' => 'updated',
         ]);
     }
 

@@ -13,9 +13,12 @@ use Tests\TestUtils;
 class VehicleServiceTest extends TestCase
 {
     use RefreshDatabase;
+
     private VehicleService $vehicleService;
+
     private PeopleService $peopleService;
-    private array $vehicleArr = array();
+
+    private array $vehicleArr = [];
 
     protected function setUp(): void
     {
@@ -42,7 +45,7 @@ class VehicleServiceTest extends TestCase
 
         $this->assertDatabaseCount('vehicles', 20);
         $this->assertDatabaseHas('vehicles', [
-            'model' => 'updated'
+            'model' => 'updated',
         ]);
     }
 

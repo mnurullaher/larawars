@@ -20,7 +20,7 @@ class Vehicle extends Model
         'crew',
         'passengers',
         'consumables',
-        'vehicle_class'
+        'vehicle_class',
     ];
 
     public function owner(): BelongsTo

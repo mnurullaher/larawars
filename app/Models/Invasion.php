@@ -13,7 +13,7 @@ class Invasion extends Model
 
     protected $fillable = [
         'title',
-        'planet_id'
+        'planet_id',
     ];
 
     public function planet(): BelongsTo

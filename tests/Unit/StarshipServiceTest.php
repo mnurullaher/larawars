@@ -13,9 +13,12 @@ use Tests\TestUtils;
 class StarshipServiceTest extends TestCase
 {
     use RefreshDatabase;
+
     private StarshipService $starshipService;
+
     private PeopleService $peopleService;
-    private array $starshipArr = array();
+
+    private array $starshipArr = [];
 
     protected function setUp(): void
     {
@@ -42,7 +45,7 @@ class StarshipServiceTest extends TestCase
 
         $this->assertDatabaseCount('starships', 20);
         $this->assertDatabaseHas('starships', [
-            'model' => 'updated'
+            'model' => 'updated',
         ]);
     }
 

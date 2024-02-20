@@ -27,7 +27,7 @@ class VehicleFactory extends Factory
             'passengers' => 'passengers',
             'consumables' => 'consumable',
             'vehicle_class' => 'class',
-            'owner_id' => null
+            'owner_id' => null,
         ];
     }
 }

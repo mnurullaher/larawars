@@ -14,13 +14,13 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => ['required', 'email'],
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt($request->password)
+            'password' => bcrypt($request->password),
         ]);
 
         return response()->json($user);
@@ -30,13 +30,13 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => ['required', 'email'],
-            'password' => 'required'
-         ]);
+            'password' => 'required',
+        ]);
 
         $credentials = request(['email', 'password']);
-        if (!auth()->attempt($credentials)) {
+        if (! auth()->attempt($credentials)) {
             return response()->json([
-                'error' => 'Invalid Credentials'
+                'error' => 'Invalid Credentials',
             ], 422);
         }
 
@@ -44,7 +44,7 @@ class AuthController extends Controller
         $authToken = $user->createToken('auth-token')->plainTextToken;
 
         return response()->json([
-            'access_token' => $authToken
+            'access_token' => $authToken,
         ]);
     }
 }

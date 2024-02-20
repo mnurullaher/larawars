@@ -11,8 +11,10 @@ use Tests\TestUtils;
 class PeopleServiceTest extends TestCase
 {
     use RefreshDatabase;
+
     private PeopleService $peopleService;
-    private array $peopleArr = array();
+
+    private array $peopleArr = [];
 
     protected function setUp(): void
     {
@@ -38,7 +40,7 @@ class PeopleServiceTest extends TestCase
 
         $this->assertDatabaseCount('people', 20);
         $this->assertDatabaseHas('people', [
-            'hair_color' => 'updated'
+            'hair_color' => 'updated',
         ]);
     }
 }

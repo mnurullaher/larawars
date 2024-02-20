@@ -18,11 +18,17 @@ class ExplorationControllerTest extends TestCase
     use RefreshDatabase;
 
     private PeopleService $peopleService;
+
     private PlanetService $planetService;
+
     private StarshipService $starshipService;
+
     private array $peopleArr;
+
     private array $planetArr;
+
     private array $starshipArr;
+
     private User $user;
 
     protected function setUp(): void
@@ -39,9 +45,9 @@ class ExplorationControllerTest extends TestCase
     {
         $response = $this->actingAs($this->user)->post('/api/explore', [
             'explorers' => [
-                $this->peopleArr[0]->name, $this->peopleArr[1]->name, 'Gandalf'
+                $this->peopleArr[0]->name, $this->peopleArr[1]->name, 'Gandalf',
             ],
-            'planet' => $this->planetArr[0]->name
+            'planet' => $this->planetArr[0]->name,
         ]);
         $data = $response->json();
 
@@ -53,9 +59,9 @@ class ExplorationControllerTest extends TestCase
     {
         $response = $this->actingAs($this->user)->post('/api/explore', [
             'explorers' => [
-                $this->peopleArr[0]->name, $this->peopleArr[0]->name
+                $this->peopleArr[0]->name, $this->peopleArr[0]->name,
             ],
-            'planet' => $this->planetArr[0]->name
+            'planet' => $this->planetArr[0]->name,
         ]);
         $data = $response->json();
 
@@ -67,9 +73,9 @@ class ExplorationControllerTest extends TestCase
     {
         $response = $this->actingAs($this->user)->post('/api/explore', [
             'explorers' => [
-                $this->peopleArr[1]->name
+                $this->peopleArr[1]->name,
             ],
-            'planet' => $this->planetArr[0]->name
+            'planet' => $this->planetArr[0]->name,
         ]);
         $data = $response->json();
 
@@ -85,7 +91,7 @@ class ExplorationControllerTest extends TestCase
             'explorers' => [
                 $this->peopleArr[0]->name,
             ],
-            'planet' => 'Middle Earth'
+            'planet' => 'Middle Earth',
         ]);
         $data = $response->json();
 
@@ -99,9 +105,9 @@ class ExplorationControllerTest extends TestCase
     {
         $response = $this->actingAs($this->user)->post('/api/explore', [
             'explorers' => [
-                $this->peopleArr[0]->name, $this->peopleArr[1]->name
+                $this->peopleArr[0]->name, $this->peopleArr[1]->name,
             ],
-            'planet' => $this->planetArr[0]->name
+            'planet' => $this->planetArr[0]->name,
         ]);
         $data = $response->json();
 
@@ -116,9 +122,9 @@ class ExplorationControllerTest extends TestCase
     {
         $response = $this->actingAs($this->user)->post('/api/explore', [
             'explorers' => [
-                $this->peopleArr[0]->name, $this->peopleArr[1]->name
+                $this->peopleArr[0]->name, $this->peopleArr[1]->name,
             ],
-            'planet' => $this->planetArr[1]->name
+            'planet' => $this->planetArr[1]->name,
         ]);
         $data = $response->json();
 
@@ -127,6 +133,7 @@ class ExplorationControllerTest extends TestCase
             'Exploration completed but nothing has founded',
             $data['message']);
     }
+
     private function prepareDatabase(): void
     {
         $peopleArr = TestUtils::getResourceArray(People::factory()->count(3)->make());

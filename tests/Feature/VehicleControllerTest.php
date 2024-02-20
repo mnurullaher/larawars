@@ -16,8 +16,10 @@ class VehicleControllerTest extends TestCase
     use RefreshDatabase;
 
     private VehicleService $vehicleService;
+
     private User $user;
-    private array $vehicleArr = array();
+
+    private array $vehicleArr = [];
 
     protected function setUp(): void
     {
@@ -35,7 +37,6 @@ class VehicleControllerTest extends TestCase
         $response = $this->actingAs($this->user)->get('/api/vehicles');
         $data = $response->json()[0];
 
-
         $response->assertStatus(200);
         $this->assertEquals(10, count($data['data']));
         $this->assertEquals(20, $data['total']);
@@ -44,14 +45,14 @@ class VehicleControllerTest extends TestCase
 
     public function test_should_return_one_planet(): void
     {
-        $requestedId =  count($this->vehicleArr) - 1;
+        $requestedId = count($this->vehicleArr) - 1;
         $this->vehicleService->store($this->vehicleArr);
 
-        $response = $this->actingAs($this->user)->get('/api/vehicles/' . $requestedId);
+        $response = $this->actingAs($this->user)->get('/api/vehicles/'.$requestedId);
         $data = $response->json()[0];
 
         $response->assertStatus(200);
-        $this->assertEquals($this->vehicleArr[$requestedId-1]->name, $data['name']);
+        $this->assertEquals($this->vehicleArr[$requestedId - 1]->name, $data['name']);
 
         Artisan::call('migrate:refresh');
     }
@@ -60,7 +61,7 @@ class VehicleControllerTest extends TestCase
     {
         $this->vehicleService->store($this->vehicleArr);
 
-        $response = $this->actingAs($this->user)->get('/api/planets/' . count($this->vehicleArr) + 1);
+        $response = $this->actingAs($this->user)->get('/api/planets/'.count($this->vehicleArr) + 1);
         $data = $response->json();
 
         $response->assertStatus(404);

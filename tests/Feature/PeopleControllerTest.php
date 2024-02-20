@@ -13,9 +13,12 @@ use Tests\TestUtils;
 class PeopleControllerTest extends TestCase
 {
     use RefreshDatabase;
+
     private PeopleService $peopleService;
+
     private User $user;
-    private array $peopleArr = array();
+
+    private array $peopleArr = [];
 
     protected function setUp(): void
     {
@@ -33,7 +36,6 @@ class PeopleControllerTest extends TestCase
         $response = $this->actingAs($this->user)->get('/api/people');
         $data = $response->json()[0];
 
-
         $response->assertStatus(200);
         $this->assertEquals(10, count($data['data']));
         $this->assertEquals(20, $data['total']);
@@ -42,14 +44,14 @@ class PeopleControllerTest extends TestCase
 
     public function test_should_return_one_person(): void
     {
-        $requestedId =  count($this->peopleArr) - 1;
+        $requestedId = count($this->peopleArr) - 1;
         $this->peopleService->store($this->peopleArr);
 
-        $response = $this->actingAs($this->user)->get('/api/people/' . $requestedId);
+        $response = $this->actingAs($this->user)->get('/api/people/'.$requestedId);
         $data = $response->json()[0];
 
         $response->assertStatus(200);
-        $this->assertEquals($this->peopleArr[$requestedId-1]->name, $data['name']);
+        $this->assertEquals($this->peopleArr[$requestedId - 1]->name, $data['name']);
 
         Artisan::call('migrate:refresh');
     }
@@ -58,7 +60,7 @@ class PeopleControllerTest extends TestCase
     {
         $this->peopleService->store($this->peopleArr);
 
-        $response = $this->actingAs($this->user)->get('/api/people/' . count($this->peopleArr) + 1);
+        $response = $this->actingAs($this->user)->get('/api/people/'.count($this->peopleArr) + 1);
         $data = $response->json();
 
         $response->assertStatus(404);

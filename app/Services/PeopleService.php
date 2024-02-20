@@ -5,8 +5,8 @@ namespace App\Services;
 use App\Models\People;
 use App\Services\Interfaces\StorableResource;
 
-class PeopleService implements StorableResource {
-
+class PeopleService implements StorableResource
+{
     public function store(array $people): void
     {
         foreach ($people as $person) {
@@ -24,7 +24,8 @@ class PeopleService implements StorableResource {
         return People::find($id);
     }
 
-    public function getByName($name) {
+    public function getByName($name)
+    {
         return People::where('name', $name)->first();
     }
 }

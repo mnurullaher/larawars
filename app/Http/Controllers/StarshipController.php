@@ -7,12 +7,14 @@ use Illuminate\Http\JsonResponse;
 
 class StarshipController extends Controller
 {
-    public function __construct(private StarshipService $starshipService){}
+    public function __construct(private StarshipService $starshipService)
+    {
+    }
 
     public function index(): JsonResponse
     {
         return response()->json([
-            $this->starshipService->getALlStarships()
+            $this->starshipService->getALlStarships(),
         ]);
     }
 
@@ -21,11 +23,12 @@ class StarshipController extends Controller
         $starship = $this->starshipService->detail($id);
         if ($starship) {
             return response()->json([
-                $starship
+                $starship,
             ]);
         }
+
         return response()->json([
-            'error' => 'Not Found'
+            'error' => 'Not Found',
         ], 404);
     }
 }

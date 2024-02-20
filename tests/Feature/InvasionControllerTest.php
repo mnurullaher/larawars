@@ -19,14 +19,23 @@ use Tests\TestUtils;
 class InvasionControllerTest extends TestCase
 {
     use RefreshDatabase;
+
     private PeopleService $peopleService;
+
     private PlanetService $planetService;
+
     private StarshipService $starshipService;
+
     private VehicleService $vehicleService;
+
     private array $peopleArr;
+
     private array $planetArr;
+
     private array $starshipArr;
+
     private array $vehicleArr;
+
     private User $user;
 
     protected function setUp(): void
@@ -41,7 +50,7 @@ class InvasionControllerTest extends TestCase
 
         Invasion::create([
             'title' => 'Test Invasion',
-            'planet_id' => Planet::where('name', $this->planetArr[0]->name)->first()->id
+            'planet_id' => Planet::where('name', $this->planetArr[0]->name)->first()->id,
         ]);
     }
 
@@ -49,10 +58,10 @@ class InvasionControllerTest extends TestCase
     {
         $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
-                'invaders' => [
-                    $this->peopleArr[0]->name, $this->peopleArr[1]->name, 'Gandalf'
-                ],
-                'planet' => $this->planetArr[0]
+            'invaders' => [
+                $this->peopleArr[0]->name, $this->peopleArr[1]->name, 'Gandalf',
+            ],
+            'planet' => $this->planetArr[0],
         ]);
         $data = $response->json();
 
@@ -65,9 +74,9 @@ class InvasionControllerTest extends TestCase
         $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
-                $this->peopleArr[0]->name
+                $this->peopleArr[0]->name,
             ],
-            'planet' => $this->planetArr[0]
+            'planet' => $this->planetArr[0],
         ]);
         $data = $response->json();
 
@@ -80,9 +89,9 @@ class InvasionControllerTest extends TestCase
         $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
-                $this->peopleArr[0]->name, $this->peopleArr[0]->name
+                $this->peopleArr[0]->name, $this->peopleArr[0]->name,
             ],
-            'planet' => $this->planetArr[0]
+            'planet' => $this->planetArr[0],
         ]);
         $data = $response->json();
 
@@ -95,9 +104,9 @@ class InvasionControllerTest extends TestCase
         $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
-                $this->peopleArr[1]->name, $this->peopleArr[2]->name
+                $this->peopleArr[1]->name, $this->peopleArr[2]->name,
             ],
-            'planet' => $this->planetArr[0]
+            'planet' => $this->planetArr[0],
         ]);
         $data = $response->json();
 
@@ -112,9 +121,9 @@ class InvasionControllerTest extends TestCase
         $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
-                $this->peopleArr[0]->name, $this->peopleArr[2]->name
+                $this->peopleArr[0]->name, $this->peopleArr[2]->name,
             ],
-            'planet' => $this->planetArr[0]
+            'planet' => $this->planetArr[0],
         ]);
         $data = $response->json();
 
@@ -129,9 +138,9 @@ class InvasionControllerTest extends TestCase
         $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
-                $this->peopleArr[0]->name, $this->peopleArr[1]->name
+                $this->peopleArr[0]->name, $this->peopleArr[1]->name,
             ],
-            'planet' => $this->planetArr[0]->name
+            'planet' => $this->planetArr[0]->name,
         ]);
         $data = $response->json();
 
@@ -146,9 +155,9 @@ class InvasionControllerTest extends TestCase
         $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Test Invasion',
             'invaders' => [
-                $this->peopleArr[0]->name, $this->peopleArr[1]->name
+                $this->peopleArr[0]->name, $this->peopleArr[1]->name,
             ],
-            'planet' => 'Middle Earth'
+            'planet' => 'Middle Earth',
         ]);
         $data = $response->json();
 
@@ -163,9 +172,9 @@ class InvasionControllerTest extends TestCase
         $response = $this->actingAs($this->user)->post('/api/invade', [
             'title' => 'Successful Test Invasion',
             'invaders' => [
-                $this->peopleArr[0]->name, $this->peopleArr[1]->name
+                $this->peopleArr[0]->name, $this->peopleArr[1]->name,
             ],
-            'planet' => $this->planetArr[1]->name
+            'planet' => $this->planetArr[1]->name,
         ]);
         $data = $response->json();
 
@@ -173,7 +182,7 @@ class InvasionControllerTest extends TestCase
             'Planet invaded successfully!',
             $data['message']);
         $this->assertDatabaseHas('invasions', [
-            'title' => 'Successful Test Invasion'
+            'title' => 'Successful Test Invasion',
         ]);
         $response->assertStatus(200);
     }

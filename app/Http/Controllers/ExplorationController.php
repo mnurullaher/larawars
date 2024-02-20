@@ -13,7 +13,7 @@ class ExplorationController extends Controller
     {
         $request->validate([
             'explorers' => ['required', 'array'],
-            'planet' => 'required'
+            'planet' => 'required',
         ]);
 
         $explorerNames = $request->input('explorers');
@@ -21,9 +21,9 @@ class ExplorationController extends Controller
 
         $resourceValidation = $this->validateResources($explorerNames, $planetName);
 
-        if (!$resourceValidation['isValid']) {
+        if (! $resourceValidation['isValid']) {
             return response()->json([
-                'message' => $resourceValidation['message']
+                'message' => $resourceValidation['message'],
             ], 400);
         }
 
@@ -34,35 +34,36 @@ class ExplorationController extends Controller
             }
 
             return response()->json([
-                'message' => "Explorers now can sense force!"
+                'message' => 'Explorers now can sense force!',
             ]);
         }
 
         return response()->json([
-            'message' => "Exploration completed but nothing has founded"
+            'message' => 'Exploration completed but nothing has founded',
         ]);
     }
 
     private function validateResources($explorerNames, $planetName): array
     {
-        if(count(array_unique($explorerNames)) != count($explorerNames)) {
-            return $this->resourceValidationError("Explorers cannot clone themselves yet!");
+        if (count(array_unique($explorerNames)) != count($explorerNames)) {
+            return $this->resourceValidationError('Explorers cannot clone themselves yet!');
         }
 
         foreach ($explorerNames as $explorerName) {
-            if (!People::where('name', $explorerName)->exists()) {
+            if (! People::where('name', $explorerName)->exists()) {
                 return $this->resourceValidationError("Not this time. You may have $explorerName in another universe!");
             }
         }
-        if (!$this->hasStarship($explorerNames)) {
+        if (! $this->hasStarship($explorerNames)) {
             return $this->resourceValidationError("This exploration is not possible!. Those explorers don't have necessary equipments.");
         }
-        if (!Planet::where('name', $planetName)->exists()) {
-            return $this->resourceValidationError("Non-existed planets cannot be visited for explorations!");
+        if (! Planet::where('name', $planetName)->exists()) {
+            return $this->resourceValidationError('Non-existed planets cannot be visited for explorations!');
         }
 
         return ['isValid' => true];
     }
+
     private function resourceValidationError($message): array
     {
         return [
@@ -70,22 +71,25 @@ class ExplorationController extends Controller
             'message' => $message,
         ];
     }
+
     private function getExplorers($explorerNames): array
     {
-        $explorers = array();
+        $explorers = [];
         foreach ($explorerNames as $explorerName) {
             $explorers[] = People::where('name', $explorerName)->first();
         }
+
         return $explorers;
     }
+
     private function hasStarship($explorerNames): bool
     {
         foreach ($this->getExplorers($explorerNames) as $explorer) {
-            if (!$explorer->starships->isEmpty()) {
+            if (! $explorer->starships->isEmpty()) {
                 return true;
             }
         }
+
         return false;
     }
-
 }

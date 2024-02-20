@@ -21,7 +21,7 @@ class Planet extends Model
         'terrain',
         'surface_water',
         'population',
-        'has_force'
+        'has_force',
     ];
 
     public function invasion(): HasOne

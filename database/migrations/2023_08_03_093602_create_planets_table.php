@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('population');
             $table->boolean('has_force')->default(false);
             $table->timestamps();
-        });;
+        });
     }
 
     /**

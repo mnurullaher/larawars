@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('vehicle_class');
             $table->foreignId('owner_id')->nullable()->constrained()->on('people');
             $table->timestamps();
-        });;
+        });
     }
 
     /**

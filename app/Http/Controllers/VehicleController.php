@@ -7,12 +7,14 @@ use Illuminate\Http\JsonResponse;
 
 class VehicleController extends Controller
 {
-    public function __construct(private VehicleService $vehicleService){}
+    public function __construct(private VehicleService $vehicleService)
+    {
+    }
 
     public function index(): JsonResponse
     {
         return response()->json([
-            $this->vehicleService->getALlVehicles()
+            $this->vehicleService->getALlVehicles(),
         ]);
     }
 
@@ -21,11 +23,12 @@ class VehicleController extends Controller
         $vehicle = $this->vehicleService->detail($id);
         if ($vehicle) {
             return response()->json([
-                $vehicle
+                $vehicle,
             ]);
         }
+
         return response()->json([
-            'error' => 'Not Found'
+            'error' => 'Not Found',
         ], 404);
     }
 }

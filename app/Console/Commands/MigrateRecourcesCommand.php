@@ -2,16 +2,14 @@
 
 namespace App\Console\Commands;
 
-use App\Models\People;
-use App\Services\Interfaces\StorableResource;
-use Exception;
 use App\Client\ResourceClient;
+use App\Services\Interfaces\StorableResource;
 use App\Services\PeopleService;
 use App\Services\PlanetService;
 use App\Services\StarshipService;
 use App\Services\VehicleService;
+use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 class MigrateRecourcesCommand extends Command
 {
@@ -45,14 +43,15 @@ class MigrateRecourcesCommand extends Command
             'people' => $this->peopleService,
             'planets' => $this->planetService,
             'vehicles' => $this->vehicleService,
-            'starships' => $this->starshipService
+            'starships' => $this->starshipService,
         ];
 
-        foreach($resources as $resource => $service) {
+        foreach ($resources as $resource => $service) {
             try {
                 $this->migrateResource($resource, $service);
             } catch (Exception $ex) {
-                $this->error('An exception occurred during data fetching: ' . $ex->getMessage());
+                $this->error('An exception occurred during data fetching: '.$ex->getMessage());
+
                 return;
             }
         }
@@ -62,7 +61,7 @@ class MigrateRecourcesCommand extends Command
             'Han Solo' => 'Millennium Falcon',
             'Luke Skywalker' => 'Star Destroyer',
             'Leia Organa' => 'CR90 corvette',
-            'Darth Vader' => 'Death Star'
+            'Darth Vader' => 'Death Star',
         ];
         $this->equipWithStarShip($peopleWithStarships);
 
@@ -70,7 +69,7 @@ class MigrateRecourcesCommand extends Command
             'Anakin Skywalker' => 'AT-AT',
             'Boba Fett' => 'LAAT/i',
             'Yoda' => 'AT-TE',
-            'Qui-Gon Jinn' => 'Vulture Droid'
+            'Qui-Gon Jinn' => 'Vulture Droid',
         ];
         $this->equipWithVehicle($peopleWithVehicles);
 
@@ -81,7 +80,7 @@ class MigrateRecourcesCommand extends Command
             'Endor',
             'Naboo',
             'Eriadu',
-            'Dantooine'
+            'Dantooine',
         ];
         $this->info('Equipping planets with force');
         $this->planetService->equipWithForce($planetsWithForce);
@@ -96,20 +95,22 @@ class MigrateRecourcesCommand extends Command
 
     }
 
-    private function migrateResource(string $resource, StorableResource $service): void {
-        $this->info('Fetching ' . $resource . ' data...');
+    private function migrateResource(string $resource, StorableResource $service): void
+    {
+        $this->info('Fetching '.$resource.' data...');
         try {
             $resourceArr = ResourceClient::getResource($resource);
-            $this->info($resource . ' data fetched');
+            $this->info($resource.' data fetched');
         } catch (Exception $ex) {
             throw $ex;
         }
-        $this->info('Writing ' . $resource . ' data to database');
+        $this->info('Writing '.$resource.' data to database');
         $service->store($resourceArr);
-        $this->info($resource . ' data stored');
+        $this->info($resource.' data stored');
     }
 
-    private function equipWithStarShip($peopleWithStarships):void {
+    private function equipWithStarShip($peopleWithStarships): void
+    {
         $this->info('Equipping people with starships');
         foreach ($peopleWithStarships as $person => $starship) {
             $this->starshipService->attachToPerson($person, $starship);
@@ -117,7 +118,8 @@ class MigrateRecourcesCommand extends Command
         $this->info('Starship equipping completed');
     }
 
-    public function equipWithVehicle($peopleWithVehicles):void {
+    public function equipWithVehicle($peopleWithVehicles): void
+    {
         $this->info('Equipping people with vehicles');
         foreach ($peopleWithVehicles as $person => $vehicle) {
             $this->vehicleService->attachToPerson($person, $vehicle);
